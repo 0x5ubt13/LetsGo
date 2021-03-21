@@ -10,42 +10,42 @@ func basicVariables() {
 
 	// How to declare variables
 	// "long" method:
-	var i int
-	i = 42
-	fmt.Println(i)
+	var varsA int
+	varsA = 42
+	fmt.Println(varsA)
 
 	// "medium" method:
-	var j int = 43
-	fmt.Println(j)
+	var varsB int = 43
+	fmt.Println(varsB)
 
 	// "short" method:
-	k := 44
-	fmt.Println(k)
+	varsC := 44
+	fmt.Println(varsC)
 
 	// "group" method:
 	var (
-		foo       = "1"
-		bar       = "2"
-		something = "else"
+		varsFoo       = "1"
+		varsBar       = "2"
+		varsSomething = "else"
 	)
 
-	fmt.Println(foo, bar, something)
+	fmt.Println(varsFoo, varsBar, varsSomething)
 
 	// Printf (f-strings). %v for "value", %T for "type":
-	fmt.Printf("%v, %T\n\n", k, k)
+	fmt.Printf("%v, %T\n\n", varsC, varsC)
 
 	// Converting types
-	var a int = 1337
-	fmt.Printf("%v, %T\n", a, a)
+	var varsD int = 1337
+	fmt.Printf("%v, %T\n", varsD, varsD)
 
-	var b = float64(a)
-	fmt.Printf("%v, %T\n", b, b)
+	var varsE = float64(varsD)
+	fmt.Printf("%v, %T\n", varsE, varsE)
 
 	// int -> float checks, but float -> int you scrap the decimal places and thus lose information
 	// int -> string, we will need to import the library "strconv":
 
-	var c = strconv.Itoa(a)
-	fmt.Printf("%v, %T\n\n\n", c, c)
+	var varsF = strconv.Itoa(varsD)
+	fmt.Printf("%v, %T\n\n\n", varsF, varsF)
 
 	//	  Signed Integers
 	//	  Left blank, compiler will choose the adecquate one
@@ -87,26 +87,27 @@ func basicVariables() {
 func primitives() {
 
 	// Booleans - true or false
-	var l bool = true
-	n := 1 == 1
-	m := 1 == 2
+	var primsL bool = true
+	primsN := 1 == 1
+	primsM := 1 == 2
 
-	fmt.Printf("%v, %T\n", l, l)
-	fmt.Printf("%v, %T\n", n, n)
-	fmt.Printf("%v, %T", m, m)
+	fmt.Printf("%v, %T\n", primsL, primsL)
+	fmt.Printf("%v, %T\n", primsN, primsN)
+	fmt.Printf("%v, %T\n\n", primsM, primsM)
 
 	// Bitwise ops
-	a := 10             // 1010
-	b := 3              // 0011
-	fmt.Println(a & b)  // 0010
-	fmt.Println(a | b)  // 1011
-	fmt.Println(a ^ b)  // 1001
-	fmt.Println(a % ^b) // 0100
+	primsA := 10 // 1010
+	primsB := 3  // 0011
+
+	fmt.Println(primsA & primsB)  // 0010
+	fmt.Println(primsA | primsB)  // 1011
+	fmt.Println(primsA ^ primsB)  // 1001
+	fmt.Println(primsA &^ primsB) // 1000 (called bitclear or AND NOT)
 
 	// Bit shifting
-	x := 8              //  2^3
-	fmt.Println(x << 3) //  2^3 * 2^3 = 2^6
-	fmt.Println(x >> 3) //  2^3 / 2^3 = 2^0
+	primsX := 8                  //  2^3
+	fmt.Println("\n", primsX<<3) //  2^3 * 2^3 = 2^6
+	fmt.Println(primsX >> 3)     //  2^3 / 2^3 = 2^0
 
 	// Floating point literals
 
@@ -116,10 +117,10 @@ func primitives() {
 
 	// var y float32 = 3.14
 	// y = 13.7e72 <-- doesn't work with float32
-	var y float64 = 13.7e72
-	z := 2.1e14
-	fmt.Printf("%v, %T\n", y, y)
-	fmt.Printf("%v, %T\n", z, z)
+	var primsY float64 = 13.7e72
+	primsZ := 2.1e14
+	fmt.Printf("\n%v, %T\n", primsY, primsY)
+	fmt.Printf("%v, %T\n", primsZ, primsZ)
 
 	// Reminder: float32 and float64 don't compute, both must be same type.
 	//           no modulus              |
@@ -133,29 +134,83 @@ func primitives() {
 	// complex64
 	// Same operations available as float32 & 64
 
-	var u complex64 = 1 + 2i
-	fmt.Printf("%v, %T\n", u, u)
-	fmt.Printf("%v, %T\n", real(u), real(u))
-	fmt.Printf("%v, %T\n", imag(u), imag(u))
+	var primsComplex complex64 = 1 + 2i
+	fmt.Printf("%v, %T\n", primsComplex, primsComplex)
+	fmt.Printf("%v, %T\n", real(primsComplex), real(primsComplex))
+	fmt.Printf("%v, %T\n", imag(primsComplex), imag(primsComplex))
 
 	// Putting together a real number and an imaginary number to make a complex number
-	var t complex128 = complex(5, 12)
-	fmt.Printf("%v, %T\n", t, t) // output = (5+12i), complex128
+	var primsT complex128 = complex(5, 12)
+	fmt.Printf("%v, %T\n", primsT, primsT) // output = (5+12i), complex128
 
 	// Strings
 	// In Go, strings are aliases for UTF-8 encoded bytes
-	s := "this is a string"
+	primsS := "this is a string"
 	//s[2] = "u" // error, cannot use "u" as type byte in assignment
-	f := []byte(s)                             // will print all bytes corresponding to each of the letters
-	fmt.Printf("%v, %T\n", f[2], f[2])         // output = 105, uint8
-	fmt.Printf("%v, %T\n", string(f[2]), f[2]) // output = i, uint8
+	primsStr := []byte(primsS)                               // will print all bytes corresponding to each of the letters
+	fmt.Printf("%v, %T\n", primsStr[2], primsStr[2])         // output = 105, uint8
+	fmt.Printf("%v, %T\n", string(primsStr[2]), primsStr[2]) // output = i, uint8
 
 	// Runes
 	// Like strings but UTF-32 instead, alias for int32
 	// They must be enclosed between single quotes ('')
-	var r rune = 'a'
-	fmt.Printf("%v, %T\n", r, r) // output = 97, int32
+	var primsRune rune = 'a'
+	fmt.Printf("%v, %T\n", primsRune, primsRune) // output = 97, int32
 	// For reading off of a rune, watch https://golang.org/pkg/strings/#Reader.ReadRune
+
+	// Primitives summary
+	//
+	// - Boolean type:
+	//		> Values are true or false
+	//		> Not an alias for other types (e.g. int)
+	//		> Zero value is false
+	//
+	// - Numeric type:
+	// 		> Integers:
+	//			* Signed integers:
+	//				¬ Positive or negative
+	//				¬ int type has varying size, but min 32 bits
+	//				¬ More control: 8 bit (int8) through 64 bit (int64)
+	// 			* Unsigned integers:
+	//				¬ Only positive
+	//				¬ 8 bit (uint8) through 32 bit (uint32)
+	// 			* Arithmetic operations
+	//				¬ add, sub, multi, div, mod
+	//			* Bitwise ops:
+	//				¬ AND, OR, XOR, NOT, AND NOT
+	//			* Zero value is 0
+	//			* Can't mix types in same family! (uint16 + uint32 = error)
+	//
+	//		> Floating point numbers:
+	//			* Follow IEEE-754 standard
+	//			* Zero value is 0
+	//			* 32 and 64 bit versions
+	// 			* Literal styles:
+	//				¬ Decimal (3.14)
+	//				¬ Exponential (13e18 or 2E10)
+	// 				¬ Mixed (13.7e12)
+	//			* Arithmetic ops
+	//				¬ Add, sub, multi, div
+	//		> Complex numbers
+	//			* Zero value is (0+0i)
+	//			* 64 and 128 bit versions
+	//			* Built-in functions:
+	//				¬ complex - make complex number from two floats
+	//				¬ real - get real part as float
+	//				¬ imag - get imaginary part as float
+	//			* Arithmetic ops:
+	//				¬ Add, sub, multi, div
+	//
+	//		> Text types
+	//			* Strings
+	//				¬ UTF-8
+	//				¬ Immutable
+	//				¬ Can be concatenated with plus (+) operator
+	//				¬ Can be converted to []byte
+	//			* Runes
+	//				¬ UTF-32
+	//				¬ Alias for int32
+	//				¬ Special methods normally required to process, e.g. strings.Reader#ReadRune
 }
 
 func constants() {
@@ -214,6 +269,29 @@ func constants() {
 	fmt.Printf("Is Admin? %v\n", isAdmin&roles == isAdmin)
 	fmt.Printf("Is Headquarters? %v\n", isHeadquarters&roles == isHeadquarters)
 	fmt.Printf("Can see Europe? %v\n", canSeeEurope&roles == canSeeEurope)
+
+	// Constants theory summary:
+	//
+	// - Immutable, but can be shadowed
+	// - Replaced by the compiler at compile time, so value must be calculable at compile time
+	// - Named like variables:
+	// 		> PascalCase for exported constants (outside of the package)
+	// 		> camelCase for internal constants
+	// - Typed constants work like immutable variables, so:
+	// 		> Can interoperate only with same type
+	// - Untyped constants work like literals, so:
+	// 		> Can interoperate only with similar types
+	//
+	// - Enumerated constants:
+	// 		> Special symbol iota allows related constants to be created easily
+	//		> Iota starts at 0 in each const block and increments by one
+	//		> Watch out for constant values that match zero values for variables, may cause subtle bugs
+	//
+	// - Enumerated expressions:
+	// 		> Operations that can be determined at compile time are allowed:
+	//			* Arithmetic
+	//			* Bitwise operations
+	//			* Bitshifting
 
 }
 
