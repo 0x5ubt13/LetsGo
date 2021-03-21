@@ -47,40 +47,40 @@ func basicVariables() {
 	var varsF = strconv.Itoa(varsD)
 	fmt.Printf("%v, %T\n\n\n", varsF, varsF)
 
-	//	  Signed Integers
-	//	  Left blank, compiler will choose the adecquate one
-	//	  Should we want to choose it ourselves, here's the min/max values:
-	//	  int8  -> from -128 up to 128
-	//	  int16 -> from -32,768 up to 32,767
-	//	  int32 -> from -2,147,483,648 up to 2,147,483,647
-	//	  int64 -> from -9,223,372,036,854,775,808 up to 9,223,372,036,854,775,807
-	//	  for larger numbers, we will need to use the math library
+	// 	Signed Integers
+	// 	Left blank, compiler will choose the adecquate one
+	// 	Should we want to choose it ourselves, here's the min/max values:
+	// 	int8  -> from -128 up to 128
+	// 	int16 -> from -32,768 up to 32,767
+	// 	int32 -> from -2,147,483,648 up to 2,147,483,647
+	// 	int64 -> from -9,223,372,036,854,775,808 up to 9,223,372,036,854,775,807
+	// 	for larger numbers, we will need to use the math library
 
-	//   Variables Summary:
+	//  Variables Summary:
 	//
-	//   Variable declaration:
-	//    - var foo int
-	//    - var foo int = 42
-	//    - foo := 42
+	//  Variable declaration:
+	//   - var foo int
+	//   - var foo int = 42
+	//   - foo := 42
 	//
-	//   Can't redeclare variables, but can shadow them
+	//  Can't redeclare variables, but can shadow them
 	//
-	//   All variables must be used
+	//  All variables must be used
 	//
-	//   Visibility:
-	//    - lowercase first letter for package scope
-	//    - uppercase first letter to export
-	//    - no private scope
+	//  Visibility:
+	//   - lowercase first letter for package scope
+	//   - uppercase first letter to export
+	//   - no private scope
 	//
-	//   Naming conventions:
-	//    - Pascal or camelCase
-	//        > Capitalize acronyms (HTTP, URL)
-	//    - As short as reasonable
-	//        > Longer names for longer lives
+	//  Naming conventions:
+	//   - Pascal or camelCase
+	//       > Capitalize acronyms (HTTP, URL)
+	//   - As short as reasonable
+	//       > Longer names for longer lives
 	//
-	//   Type conversions:
-	//    - destinationType(variable)
-	//    - use "strconv" library for strings
+	//  Type conversions:
+	//   - destinationType(variable)
+	//   - use "strconv" library for strings
 
 }
 
