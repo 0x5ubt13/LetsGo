@@ -295,8 +295,32 @@ func constants() {
 
 }
 
+func arraysAndSlices() {
+
+	// Arrays
+	// Declare first the number of indexes, then the type, then the values
+	grades := [3]int{97, 85, 93}
+	fmt.Printf("Grades: %v \n", grades)
+
+	gradesLiteral := [...]int{97, 85, 93}
+	fmt.Printf("Grades: %v", gradesLiteral)
+
+	// Arrays' indexes look like python's lists: first index is index [0]
+	var students [5]string
+	fmt.Printf("Students: %v\n", students)
+	students[0] = "Lisa"
+	fmt.Printf("Students: %v\n", students)
+	students[2] = "Emanuel"
+	students[1] = "Gabriel"
+	fmt.Printf("Students: %v\n", students)
+	fmt.Printf("Students[1]: %v\n", students[1])
+
+	fmt.Printf("Students: %v\n", len(students))
+}
+
 func main() {
 	basicVariables()
 	primitives()
 	constants()
+	arraysAndSlices()
 }
