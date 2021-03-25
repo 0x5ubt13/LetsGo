@@ -233,6 +233,7 @@ func constants() {
 
 	fmt.Printf("%v\n", snakeSpecialist) // output = 8
 
+	fmt.Print("\n")
 	// iota example 2:
 	type ByteSize float64
 	const (
@@ -250,6 +251,7 @@ func constants() {
 	fileSize := 4000000000.
 	fmt.Printf("%.2fGB\n", fileSize/GB)
 
+	fmt.Print("\n")
 	// Setting boolean flags inside of a single byte with bit shifting and iota
 
 	const (
@@ -299,13 +301,18 @@ func arraysAndSlices() {
 
 	// Arrays
 	// Declare first the number of indexes, then the type, then the values
+
+	// Integer arrays
 	grades := [3]int{97, 85, 93}
 	fmt.Printf("Grades: %v \n", grades)
 
 	gradesLiteral := [...]int{97, 85, 93}
 	fmt.Printf("Grades: %v", gradesLiteral)
 
-	// Arrays' indexes look like python's lists: first index is index [0]
+	fmt.Print("\n\n")
+
+	// Strings arrays
+	// Note: arrays' indexes look like python's lists: first index is index [0]
 	var students [5]string
 	fmt.Printf("Students: %v\n", students)
 	students[0] = "Lisa"
@@ -313,11 +320,39 @@ func arraysAndSlices() {
 	students[2] = "Emanuel"
 	students[1] = "Gabriel"
 	fmt.Printf("Students: %v\n", students)
-	fmt.Printf("Students[1]: %v\n", students[1])
+	fmt.Printf("Student #1: %v\n", students[1])
 
 	fmt.Printf("Students: %v\n", len(students))
-}
 
+	fmt.Print("\n")
+	// Array arrays
+	var identityMatrix [3][3]int = [3][3]int{[3]int{1, 0, 0}, [3]int{0, 1, 0}, [3]int{0, 0, 1}}
+	fmt.Printf("%v\n%v\n%v\n", identityMatrix[0], identityMatrix[1], identityMatrix[2])
+
+	var identityMatrixTwo [3][3]int
+	identityMatrixTwo[0] = [3]int{0, 0, 1}
+	identityMatrixTwo[1] = [3]int{0, 1, 0}
+	identityMatrixTwo[2] = [3]int{1, 0, 0}
+	fmt.Println(identityMatrixTwo)
+
+	fmt.Print("\n")
+	// In Go, when declaring a new variable pointing to an existing list, it doesn't get referenced but
+	// it gets fully copied instead (slice equivalent in python = list[:])
+	arrayA := [...]int{1, 2, 3}
+	arrayB := arrayA
+	arrayB[1] = 11
+	fmt.Println(arrayA) // output = [1 2 3]
+	fmt.Println(arrayB) // output = [1 11 3]
+
+	// In the other hand, if we want for the new variable to point to the list, we use the ampersand
+	fmt.Print("\n")
+	arrayC := [...]int{1, 2, 3}
+	arrayD := &arrayC
+	arrayD[1] = 11
+	fmt.Println(arrayC) // output = [1 11 3]
+	fmt.Println(arrayD) // output = &[1 11 3]
+
+}
 func main() {
 	basicVariables()
 	primitives()
