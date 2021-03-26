@@ -352,6 +352,41 @@ func arraysAndSlices() {
 	fmt.Println(arrayC) // output = [1 11 3]
 	fmt.Println(arrayD) // output = &[1 11 3]
 
+	// Slices
+	// When you don't want to make a fixed size array, use slices
+	// They look like arrays and behave very similarly, with certain exceptions
+	fmt.Print("\n")
+	sliceA := []int{1, 2, 3}
+	sliceB := sliceA // Now we don't need the ampersand, sliceB will be pointed to sliceA just like in Python's lists
+	sliceB[1] = 22
+	fmt.Println(sliceA)                       // output = [1 22 3]
+	fmt.Printf("Length: %v\n", len(sliceA))   // output = 3
+	fmt.Printf("Capacity: %v\n", cap(sliceA)) // output = 3
+
+	// PoC slice slices
+	sliceC := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	sliceD := sliceC[:]   // slice of all elements
+	sliceE := sliceC[3:]  // slice of all elements
+	sliceF := sliceC[:6]  // slice first 6 elements
+	sliceG := sliceC[3:6] // slice the 4th, 5th, and 6th elements
+	fmt.Println(sliceC)
+	fmt.Println(sliceD)
+	fmt.Println(sliceE)
+	fmt.Println(sliceF)
+	fmt.Println(sliceG)
+
+	// Slices work the exact same way with an array
+	arrayF := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	sliceH := arrayF[:]   // slice of all elements
+	sliceI := sliceC[3:]  // slice from 4th element to end
+	sliceJ := sliceC[:6]  // slice first 6 elements
+	sliceK := sliceC[3:6] // slice the 4th, 5th, and 6th elements
+	fmt.Println(arrayF)
+	fmt.Println(sliceH)
+	fmt.Println(sliceI)
+	fmt.Println(sliceJ)
+	fmt.Println(sliceK)
+
 }
 func main() {
 	basicVariables()
