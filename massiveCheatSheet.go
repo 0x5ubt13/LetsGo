@@ -369,23 +369,48 @@ func arraysAndSlices() {
 	sliceE := sliceC[3:]  // slice of all elements
 	sliceF := sliceC[:6]  // slice first 6 elements
 	sliceG := sliceC[3:6] // slice the 4th, 5th, and 6th elements
+	sliceD[4] = 999
 	fmt.Println(sliceC)
 	fmt.Println(sliceD)
 	fmt.Println(sliceE)
 	fmt.Println(sliceF)
 	fmt.Println(sliceG)
+	fmt.Print("\n")
 
-	// Slices work the exact same way with an array
+	// Slicing works the same way with an array. Outputs from both above and below snippets are the same
 	arrayF := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	sliceH := arrayF[:]   // slice of all elements
-	sliceI := sliceC[3:]  // slice from 4th element to end
-	sliceJ := sliceC[:6]  // slice first 6 elements
-	sliceK := sliceC[3:6] // slice the 4th, 5th, and 6th elements
+	sliceI := sliceH[3:]  // slice from 4th element to end
+	sliceJ := sliceH[:6]  // slice first 6 elements
+	sliceK := sliceH[3:6] // slice the 4th, 5th, and 6th elements
+	sliceH[4] = 777
 	fmt.Println(arrayF)
 	fmt.Println(sliceH)
 	fmt.Println(sliceI)
 	fmt.Println(sliceJ)
 	fmt.Println(sliceK)
+	fmt.Print("\n")
+
+	// Creating a slice with the make() function:
+	// 1st arg = type of object, 2nd arg = length, 3rd arg (opt) = capacity
+	makingA := make([]int, 3, 100)
+	fmt.Println(makingA)
+	fmt.Printf("Length: %v\n", len(makingA))
+	fmt.Printf("Capacity: %v\n", cap(makingA))
+
+	// Appending elements to a slice
+	appending := []int{}
+	fmt.Println(appending)
+	fmt.Printf("Length: %v\n", len(appending))
+	fmt.Printf("Capacity: %v\n", cap(appending))
+	appending = append(appending, 1)
+	fmt.Println(appending)
+	fmt.Printf("Length: %v\n", len(appending))
+	fmt.Printf("Capacity: %v\n", cap(appending))
+	appending = append(appending, 2, 3, 4, 5)
+	fmt.Println(appending)
+	fmt.Printf("Length: %v\n", len(appending))
+	fmt.Printf("Capacity: %v\n", cap(appending))
 
 }
 func main() {
