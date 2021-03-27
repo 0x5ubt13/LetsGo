@@ -349,19 +349,18 @@ func arraysAndSlices() {
 	arrayC := [...]int{1, 2, 3}
 	arrayD := &arrayC
 	arrayD[1] = 11
-	fmt.Println(arrayC) // output = [1 11 3]
-	fmt.Println(arrayD) // output = &[1 11 3]
+	fmt.Println(arrayC)       // output = [1 11 3]
+	fmt.Print(arrayD, "\n\n") // output = &[1 11 3]
 
 	// Slices
 	// When you don't want to make a fixed size array, use slices
 	// They look like arrays and behave very similarly, with certain exceptions
-	fmt.Print("\n")
 	sliceA := []int{1, 2, 3}
 	sliceB := sliceA // Now we don't need the ampersand, sliceB will be pointed to sliceA just like in Python's lists
 	sliceB[1] = 22
-	fmt.Println(sliceA)                       // output = [1 22 3]
-	fmt.Printf("Length: %v\n", len(sliceA))   // output = 3
-	fmt.Printf("Capacity: %v\n", cap(sliceA)) // output = 3
+	fmt.Println(sliceA)                         // output = [1 22 3]
+	fmt.Printf("Length: %v\n", len(sliceA))     // output = 3
+	fmt.Printf("Capacity: %v\n\n", cap(sliceA)) // output = 3
 
 	// PoC slice slices
 	sliceC := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
@@ -374,8 +373,7 @@ func arraysAndSlices() {
 	fmt.Println(sliceD)
 	fmt.Println(sliceE)
 	fmt.Println(sliceF)
-	fmt.Println(sliceG)
-	fmt.Print("\n")
+	fmt.Println(sliceG, "\n")
 
 	// Slicing works the same way with an array. Outputs from both above and below snippets are the same
 	arrayF := [...]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
@@ -410,7 +408,23 @@ func arraysAndSlices() {
 	appending = append(appending, 2, 3, 4, 5)
 	fmt.Println(appending)
 	fmt.Printf("Length: %v\n", len(appending))
-	fmt.Printf("Capacity: %v\n", cap(appending))
+	fmt.Printf("Capacity: %v\n\n", cap(appending))
+
+	// Concatenating slices:
+	// Use the variadic function operator (called spread operator in JavaScript) (...)
+	//appending = append(appending, []int{2, 3, 4, 5}) // This will throw an error
+	appending = append(appending, []int{2, 3, 4, 5}...) // This will work perfectly
+	fmt.Println(appending)
+	fmt.Printf("Length: %v\n", len(appending))
+	fmt.Printf("Capacity: %v\n\n", cap(appending))
+
+	// Stack operations (append, pop)
+	// Just do it with more slices! And remember to use the variadic operator
+	stackOps := []int{1, 2, 3, 4, 5}
+	fmt.Println(stackOps) // Output = [1 2 3 4 5]
+	stackOps2 := append(stackOps[:2], stackOps[3:]...)
+	fmt.Println(stackOps2) // Output = [1 2 4 5]
+	fmt.Println(stackOps)  // Output = [1 2 4 5 5] (??????????)
 
 }
 func main() {
