@@ -421,15 +421,103 @@ func arraysAndSlices() {
 	// Stack operations (append, pop)
 	// Just do it with more slices! And remember to use the variadic operator
 	stackOps := []int{1, 2, 3, 4, 5}
-	fmt.Println(stackOps) // Output = [1 2 3 4 5]
-	stackOps2 := append(stackOps[:2], stackOps[3:]...)
-	fmt.Println(stackOps2) // Output = [1 2 4 5]
-	fmt.Println(stackOps)  // Output = [1 2 4 5 5] (??????????)
+	fmt.Println(stackOps)                              // Output = [1 2 3 4 5]
+	stackOps2 := append(stackOps[:2], stackOps[3:]...) // remember the 3 dots or it won't work
+	fmt.Println(stackOps2)                             // Output = [1 2 4 5]
+	fmt.Println(stackOps)                              // Output = [1 2 4 5 5] (???) (make sure you don't reference the first slice after this operation)
+
+	// Arrays and Slices summary:
+	//
+	// - Arrays:
+	// 		> Collection of items with same type
+	//		> Fixed size
+	//		> Declaration styles:
+	//			* a := [3]int{1, 2, 3}
+	//			* a := [...]int{1, 2, 3}
+	//			* var a [3]int
+	//		> Access via zero-based index
+	//			* a := [3]int{1, 3, 5} // a[1] == 3
+	//		> len() function returns size of array
+	// 		> Copies refer to different underlying data (unexpected behaviour)
+	//
+	// - Slices:
+	// 		> Backed by arrays
+	// 		> Creation styles
+	//			* Literal style
+	//			* Via make function:
+	//				· a := make([]int, 10)
+	//				· a := make([]int, 10, 100)
+	//		> len() func returns length of slice
+	//		> cap() func returns capacity of slice
+	//		> append() func to add elements to slice
+	//			* May cause expensive copy operation if underlying array is too small
+	//		> Copies refer to same underlying array
 
 }
+
+func mapsAndStructs() {
+
+	// Maps
+	// key:value pairs, always with the same type as first declared
+
+	// To create a map for later populating it, use the make() function:
+	statePopulations := make(map[string]int) // "Make a map of strings as keys with integers as values
+	statePopulations = map[string]int{
+		"California": 39250017,
+		"Texas":      27862596,
+		"Florida":    20612439,
+		"New York":   19745289,
+		"Ohio":       11614373,
+	}
+	//map1 := map[[]int]string{} // This won't work. Slice isn't a valid type for this
+	//testmap1 := map[[3]int]string{} // "Create a map of an array of integers over to strings"
+	map2 := statePopulations
+	delete(map2, "Ohio") // it also gets deleted from statePopulations
+
+	// Checking whether a key in map2 exists with "comma okay" (, ok)
+	_, ok := map2["California"]
+	fmt.Println(ok) // Returns true
+
+	// Adding a new key:value pair
+	statePopulations["Pennsylvania"] = 12801539 // it also gets declared in map2
+	fmt.Println(statePopulations)
+	fmt.Println(map2)
+	fmt.Println(map2["Ohio"])                // If key doesn't exist, a zero value returns
+	fmt.Println(len(statePopulations), "\n") // Returns length of map (5)
+
+	// Structs
+	// Like maps but we can use the data type we want within them
+
+	type Doctor struct {
+		number     int      // number will be an integer
+		actorName  string   // actorName will be a string
+		companions []string // companions will be a slice of strings
+	}
+
+	aDoctor := Doctor{
+		number:    3,
+		actorName: "Jon Pertwee",
+		companions: []string{
+			"Liz Shaw",
+			"Jo Grant",
+			"Sarah Jane Smith",
+		},
+	}
+	fmt.Println(aDoctor)
+
+	// Creating anonymous struct for organising a one time only subset of data:
+	oneTime := struct{ name string }{name: "Gabriel"}
+	anotherTime := oneTime
+	anotherTime.name = "Emanuel"
+	fmt.Println(oneTime)
+	fmt.Println(anotherTime)
+
+}
+
 func main() {
 	basicVariables()
 	primitives()
 	constants()
 	arraysAndSlices()
+	mapsAndStructs()
 }
