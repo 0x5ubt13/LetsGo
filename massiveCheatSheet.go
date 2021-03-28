@@ -544,7 +544,7 @@ func mapsAndStructs() {
 	// Import reflection package (reflect) to check Tags
 	embedType := reflect.TypeOf(NewAnimal{})
 	field, _ := embedType.FieldByName("Name")
-	fmt.Println(field.Tag)
+	fmt.Println(field.Tag, "\n\n")
 
 	// Summary:
 	//
@@ -564,13 +564,84 @@ func mapsAndStructs() {
 	// 		> Structs are value types
 	//		> No inheritance, but can use composition via embedding
 	//		> Tags can be added to struct fields to describe field
+}
+
+func controlFlow() {
+	// If - else if - else statements
+
+	if true {
+		fmt.Println("The test is true\n")
+	}
+
+	// Illustrating a control flow with previous code
+	cfStatePopulations := map[string]int{
+		"California": 39250017,
+		"New York":   19745289,
+		"Ohio":       11614373,
+	}
+	// if pop "comma okay" := (the test); is okay {go ahead and do this}
+	// also, pop var will only exist within that if statement unless previously declared
+	if cfPopulation, ok := cfStatePopulations["California"]; ok {
+		fmt.Println(cfPopulation)
+	}
+
+	// Guessing a number game
+	cfNumber := 50
+	cfGuess := 70
+	if cfGuess < cfNumber {
+		fmt.Println("Too low")
+	}
+	if cfGuess > cfNumber {
+		fmt.Println("Too high")
+	}
+	if cfGuess == cfNumber {
+		fmt.Println("You got it!")
+	}
+	fmt.Println(cfNumber <= cfGuess, cfNumber >= cfGuess, cfNumber != cfGuess, "\n") // true false true
+
+	// Adding logical operators
+	// && = and
+	// || = or
+	// ! = not
+	cfNumber2 := 40
+	cfGuess2 := 39
+	if cfGuess2 < 1 || cfGuess2 > 100 { // Or
+		fmt.Println("The guess must be between 1 and 100!")
+	}
+	if cfGuess2 >= 1 && cfGuess2 <= 100 { // And
+		if cfGuess2 < cfNumber2 {
+			fmt.Println("Too low")
+		}
+		if cfGuess2 > cfNumber2 {
+			fmt.Println("Too high")
+		}
+		if cfGuess2 == cfNumber2 {
+			fmt.Println("You got it!")
+		}
+		fmt.Println(cfNumber2 <= cfGuess2, cfNumber2 >= cfGuess2, cfNumber2 != cfGuess2, "\n") // false true true
+	}
+
+	// Short-circuiting in Go:
+	// If you have an Or statement with 3 values and the 1st is true, rest are not executed
+	cfGuess3 := -5
+	if cfGuess3 < 1 || returnTrue() || cfGuess3 > 100 { // it reads up to the first condition so returnTrue() never executes
+		fmt.Println("The guess must be between 1 and 100!")
+	}
 
 }
 
+func returnTrue() bool {
+	// Declaring this function to showcase short-circuiting in control flow statements. See line 625.
+
+	fmt.Println("Returning True")
+	return true
+}
+
 func main() {
-	basicVariables()
-	primitives()
-	constants()
-	arraysAndSlices()
-	mapsAndStructs()
+	//basicVariables()
+	//primitives()
+	//constants()
+	//arraysAndSlices()
+	//mapsAndStructs()
+	controlFlow()
 }
