@@ -1,7 +1,8 @@
 package main // Go scripts always start with this line, either main or something else
 
 import (
-	"fmt"     // "format" - always import this to printing out
+	"fmt" // "format" - always import this to printing out
+	"math"
 	"reflect" // "reflections" - for extracting tags out of a field when dealing with structs
 	"strconv" // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
 )
@@ -605,10 +606,11 @@ func controlFlow() {
 	// ! = not
 	cfNumber2 := 40
 	cfGuess2 := 39
-	if cfGuess2 < 1 || cfGuess2 > 100 { // Or
-		fmt.Println("The guess must be between 1 and 100!")
-	}
-	if cfGuess2 >= 1 && cfGuess2 <= 100 { // And
+	if cfGuess2 < 1 {
+		fmt.Println("The guess must be greater than 1!")
+	} else if cfGuess2 > 100 {
+		fmt.Println("The guess must be less than 100!")
+	} else {
 		if cfGuess2 < cfNumber2 {
 			fmt.Println("Too low")
 		}
@@ -622,10 +624,28 @@ func controlFlow() {
 	}
 
 	// Short-circuiting in Go:
-	// If you have an Or statement with 3 values and the 1st is true, rest are not executed
+	// If you have an statement with 2 or more operators and the 1st one is enough to make the rest of the condition,
+	// the rest are not going to be evaluated (in OR, the 1st being true; in AND, the 1st being false, etc)
 	cfGuess3 := -5
 	if cfGuess3 < 1 || returnTrue() || cfGuess3 > 100 { // it reads up to the first condition so returnTrue() never executes
 		fmt.Println("The guess must be between 1 and 100!")
+	}
+
+	// Testing equality operators, problem with floating point numbers
+	myNum := 0.1 // This will pass the if statement
+	//myNum := 0.123456789  // This will not pass the if statement
+	if myNum == math.Pow(math.Sqrt(myNum), 2) {
+		fmt.Println("These are the same")
+	} else {
+		fmt.Println("These are different")
+	}
+
+	// For the float to pass the test, we need to cheat:
+	myNum2 := 0.123456789
+	if math.Abs(myNum2/math.Pow(math.Sqrt(myNum2), 2)-1) < 0.001 {
+		fmt.Println("These are the same")
+	} else {
+		fmt.Println("These are different")
 	}
 
 }
