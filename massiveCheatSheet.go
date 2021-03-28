@@ -1,7 +1,10 @@
 package main // Go scripts always start with this line, either main or something else
 
-import "fmt"     // "format" - always import this to printing out
-import "strconv" // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
+import (
+	"fmt"     // "format" - always import this to printing out
+	"reflect" // "reflections" - for extracting tags out of a field when dealing with structs
+	"strconv" // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
+)
 
 func basicVariables() {
 
@@ -506,12 +509,42 @@ func mapsAndStructs() {
 	fmt.Println(aDoctor)
 
 	// Creating anonymous struct for organising a one time only subset of data:
-	oneTime := struct{ name string }{name: "Gabriel"}
-	anotherTime := oneTime
-	anotherTime.name = "Emanuel"
+	oneTime := struct{ name string }{name: aDoctor.actorName}
+	anotherTime := oneTime // if := &oneTime, Tom Baker would apply in both
+	anotherTime.name = "Tom Baker"
 	fmt.Println(oneTime)
-	fmt.Println(anotherTime)
+	fmt.Println(anotherTime, "\n")
 
+	// Embedding (pseudo-inheritance)
+	type Animal struct {
+		Name   string
+		Origin string
+	}
+
+	type Bird struct {
+		Animal   // We embed the abovementioned struct. Now we *have* Animal
+		SpeekKPH float32
+		CanFly   bool
+	}
+
+	embedding := Bird{}
+	embedding.Name = "Emu"
+	embedding.Origin = "Australia"
+	embedding.SpeekKPH = 48
+	embedding.CanFly = false
+	fmt.Println(embedding)
+	fmt.Println("Name:", embedding.Name, "\n")
+
+	// Tags in embeds
+	type NewAnimal struct {
+		Name   string `required max:"100"`
+		Origin string
+	}
+
+	// Import reflection package (reflect)
+	embedType := reflect.TypeOf(NewAnimal{})
+	field, _ := embedType.FieldByName("Name")
+	fmt.Println(field.Tag)
 }
 
 func main() {
