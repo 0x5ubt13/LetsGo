@@ -648,10 +648,45 @@ func controlFlow() {
 		fmt.Println("These are different")
 	}
 
+	// Switch statements
+	// switch "num" {case 1:, case 2:, default:}
+	switch 2 {
+	case 1:
+		fmt.Println("one")
+	case 2:
+		fmt.Println("two")
+	default:
+		fmt.Println("neither one nor two")
+	} // output = "two"
+
+	// In other languages, to compare against multiple cases they use "follow through". In Go,
+	// this is explicitly forbidden. If you want this feature you must declare "fall through". What
+	// we have though, is multiple testing in a single case, but they must be unique (non overlapping):
+	switch i := 2 + 3; i { // = 5
+	case 1, 5, 10:
+		fmt.Println("one, five or ten")
+	case 2, 4, 6:
+		fmt.Println("two, four or six")
+	default:
+		fmt.Println("another number")
+	} // output = "one, five or ten"
+
+	// Switches with boolean conditions:
+	i := 10
+	switch {
+	case i <= 10:
+		fmt.Println("less than or equal to ten")
+	case i >= 20:
+		fmt.Println("less than or equal to twenty")
+	default:
+		fmt.Println("greater than twenty")
+	} // output = executes the first case because the second one overlaps, but triggers later so gets ignored.
+	// this means "break" keyword is implied by design, as abovementioned with the fall through issue
+
 }
 
 func returnTrue() bool {
-	// Declaring this function to showcase short-circuiting in control flow statements. See line 625.
+	// Declaring this function to showcase short-circuiting in control flow statements. See line 626.
 
 	fmt.Println("Returning True")
 	return true
