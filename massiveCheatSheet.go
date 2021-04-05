@@ -672,16 +672,53 @@ func controlFlow() {
 	} // output = "one, five or ten"
 
 	// Switches with boolean conditions:
-	i := 10
+	// output = executes the first case because the second one overlaps, but triggers later so gets ignored.
+	// this means "break" keyword is implied by design, as abovementioned with the fall through issue
+	boolSwitch := 10
 	switch {
-	case i <= 10:
+	case boolSwitch <= 10:
 		fmt.Println("less than or equal to ten")
-	case i >= 20:
+	case boolSwitch >= 20:
 		fmt.Println("less than or equal to twenty")
 	default:
 		fmt.Println("greater than twenty")
-	} // output = executes the first case because the second one overlaps, but triggers later so gets ignored.
-	// this means "break" keyword is implied by design, as abovementioned with the fall through issue
+	}
+
+	// Type switches
+	var typeSwitch interface{} = 1
+	switch typeSwitch.(type) {
+	case int:
+		fmt.Println("typeSwitch is an int")
+		break
+		fmt.Println("This will not get printed")
+	case float64:
+		fmt.Println("typeSwitch is a float64")
+	case string:
+		fmt.Println("typeSwitch is a string")
+	default:
+		fmt.Println("typeSwitch is another type")
+	}
+
+	// Control flow summary
+	//
+	// - If statements
+	// 		> Initializer
+	//		> Comparison operators (<, >, ==, >=, <=, !=)
+	//		> Logical operators(&&, ||, !)
+	//		> Short circuiting
+	//		> If - else statements
+	//		> If - else if statements
+	//		> If - else if - else statements
+	//		> Equality and floats (cheat using comparison against an error function)
+	//
+	// - Switch statements
+	//		> Switching on a tag (variable)
+	//		> Cases with multiple tests
+	//		> Initializers generating tags
+	//		> Switches with no tag
+	// 		> Fallthrough (implicit breaks, explicit fallthrough)
+	//		> Type switches
+	//		> Breaking out early
 
 }
 
@@ -692,11 +729,48 @@ func returnTrue() bool {
 	return true
 }
 
+func loops() {
+
+	// For loops:
+
+	// initialise; condition; increment by {something to loop}
+	for loopOne := 0; loopOne < 5; loopOne++ {
+		fmt.Println(loopOne)
+	}
+
+	fmt.Println("\n")
+
+	// Incrementing by other than 1:
+	for loopTwo := 0; loopTwo < 5; loopTwo = loopTwo + 2 {
+		fmt.Println(loopTwo)
+	}
+
+	fmt.Println("\n")
+
+	// Looping two variables at the same time
+	for loopThree, loopFour := 0, 0; loopThree < 5; loopThree, loopFour = loopThree+1, loopFour+2 {
+		fmt.Println(loopThree, loopFour)
+	}
+
+	fmt.Println("\n")
+
+	// Playing around with the variable
+	for loopFive := 0; loopFive < 5; loopFive++ {
+		fmt.Println(loopFive)
+		if loopFive%2 == 0 {
+			loopFive /= 2
+		} else {
+			loopFive = 2*loopFive + 1
+		}
+	}
+}
+
 func main() {
 	//basicVariables()
 	//primitives()
 	//constants()
 	//arraysAndSlices()
 	//mapsAndStructs()
-	controlFlow()
+	//controlFlow()
+	loops()
 }
