@@ -1,10 +1,13 @@
 package main // Go scripts always start with this line, either main or something else
 
 import (
-	"fmt" // "format" - always import this to printing out
+	"fmt"       // "format" - always import this to printing out
+	"io/ioutil" // "input outout utility" - to read the body of a request
+	"log"       // to log errors
 	"math"
-	"reflect" // "reflections" - for extracting tags out of a field when dealing with structs
-	"strconv" // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
+	"net/http" // to make http Get requests
+	"reflect"  // "reflections" - for extracting tags out of a field when dealing with structs
+	"strconv"  // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
 )
 
 func basicVariables() {
@@ -852,11 +855,146 @@ Loop:
 	//				· Only the keys: for k :=
 	//				· Only the values: for _, v :=
 }
-func deferPanicRecover() {
 
-	// Control flow:
-	// Defer, Panic and Recover
+///////////////////////////////
+//       Control flow:       //
+//  Defer, Panic and Recover //
+///////////////////////////////
 
+// Deferring:
+// We use this keyword to delay the execution of a function until right before hitting the "return".
+
+func deferOne() {
+	fmt.Println("start")
+	defer fmt.Println("middle\n")
+	fmt.Println("end")
+	// output: start, end, middle. Middle gets deferred to the end.
+}
+
+func deferTwo() {
+	defer fmt.Println("start\n")
+	defer fmt.Println("middle")
+	defer fmt.Println("end")
+	// When deferring multiple statements, they work in LIFO order
+	// output: end, middle, start
+}
+
+// Deferring is very useful when we have an open object. Deferring the Close() statement will keep it open
+// until we don't need to work with it anymore
+// Be mindful of deferring a lot of open resources, in that case you'd probably be better off not deferring
+func deferThree() {
+	res, err := http.Get("http://www.google.com/robots.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer res.Body.Close()
+	robots, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", robots)
+	fmt.Println("\n")
+}
+
+// Also, the defer statement evaluates and then gets delayed.
+// In this example, the output is "start"
+func deferFour() {
+	a := "start"
+	defer fmt.Println(a)
+	a = "end"
+}
+
+func panicking() {
+	// In Go we have no thrown exceptions, but in some situations we have "panic"
+	// Panic One:
+	// a, b := 1, 0
+	// ans := a / b
+	// fmt.Println(ans)
+	// Output 1: panic: runtime error: integer divide by zero
+
+	// Panic Two:
+	// fmt.Println("start")
+	// panic("something bad has happened")
+	// fmt.Println("end")
+	// Output 2: panic: runtime error: integer divide by zero
+
+	// Panic Three:
+	// Setting up a webserver:
+	// http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//  	w.Write([]byte("Hello Go!"))
+	// })
+	// err := http.ListenAndServe(":8080, nil")
+	//		if err != nil {
+	//			panic(err.Error())
+	//		}
+	// If we run the application twice, it will return the Panic error
+
+	// Panic Four:
+	// fmt.Println("start")
+	// defer fmt.Println("this was deferred")
+	// panic("something bad happened")
+	// fmt.Println("end") // <- this will never get printed
+}
+
+func recovering() {
+	// Panic Five / Recovery showcase
+	// Nesting deferred recovery in anonymous func inside of a nested anonymous func
+	fmt.Println("Start")
+	func() {
+		fmt.Println("About to panic")
+		defer func() {
+			if err := recover(); err != nil {
+				log.Println("Error:", err)
+			}
+		}() // <- Parenthesis to call the anon func
+		panic("something bad happened")
+		fmt.Println("done panicking")
+	}() // <- Parenthesis to call the anon func
+	fmt.Println("end")
+
+	// Summary
+	//
+	// 	- Defer:
+	// 		> Used to delay execution of a statement until function exists
+	//		> Useful to group "open" and "close" functions together
+	//			* Be careful in loops though
+	// 		> Run in LIFO order
+	//		> Args evaluated at time defer is executed, not at time of called function execution
+	//
+	// 	- Panic:
+	//		> Occurs when program can't continue at all
+	//			* Don't use when file can't be opened, unless it's critical
+	//			* Use for unrecoverable events - can't obtain TCP port for web server
+	//		> Function will stop executing
+	//			* Deferred functions will still fire
+	// 		> If nothing handles panic, program will exit
+	//
+	// 	- Recover:
+	//		> Used to recover from panics
+	//		> Only useful in deferred functions
+	//		> Current function will not attempt to continue, but higher functions in call stack will!
+}
+
+func pointers() {
+
+	// Pointers:
+
+	// De-referencing operator
+	var pa int = 42
+	var pb *int = &pa    // <-- The * here is declaring a pointer to data of the int type
+	fmt.Println(pa, *pb) // <-- The * here is de-referencing the memory location to pull the value
+	pa = 27
+	fmt.Println(pa, *pb)
+	*pb = 14
+	fmt.Println(pa, *pb, "\n")
+
+	// Pointer arithmetic
+	// If we need to do this, we should import the package "unsafe"
+	// By design, Go is built in by simplicity, hence pointer arithmetics are not allowed by default
+	// pc := [3]int{1, 2, 3}
+	// pd := &pc[0]
+	// pe := &pc[1] - 4 // <-- This would throw error - invalid operation - mismatched types *int and int.
+	// fmt.Printf("%v %p %p\n", pc, pd, pe)
 }
 
 func main() {
@@ -867,5 +1005,12 @@ func main() {
 	//mapsAndStructs()
 	//controlFlow()
 	//loops()
-	deferPanicRecover()
+	//Defer, Panic and Recover:
+	//deferOne()
+	//deferTwo()
+	//deferThree()
+	//deferFour()
+	//panicking()
+	//recovering()
+	pointers()
 }
