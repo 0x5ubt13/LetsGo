@@ -754,7 +754,7 @@ func loops() {
 
 	fmt.Println("\n")
 
-	// Playing around with the variable
+	// Playing around with the counter (bad practise but valuable trick to know about)
 	for loopFive := 0; loopFive < 5; loopFive++ {
 		fmt.Println(loopFive)
 		if loopFive%2 == 0 {
@@ -763,6 +763,100 @@ func loops() {
 			loopFive = 2*loopFive + 1
 		}
 	}
+
+	fmt.Println("\n")
+
+	// Simplifying the initialisation:
+	loopSix := 0
+	for ; loopSix < 5; loopSix++ {
+		fmt.Println(loopSix)
+	}
+
+	fmt.Println("\n")
+
+	// More simplifying, variable scoped now only to the For loop.
+	for loopSeven := 0; loopSeven < 5; {
+		fmt.Println(loopSeven)
+		loopSeven++
+	}
+
+	fmt.Println()
+
+	// The following is also equivalent to Do ... while loops
+	loopEight := 0
+	for loopEight < 5 {
+		fmt.Println(loopEight)
+		loopEight++
+	}
+
+	fmt.Println("\n")
+
+	// The following is also equivalent to While True loops
+	loopNine := 0
+	for {
+		fmt.Println(loopNine)
+		loopNine++
+		if loopNine == 5 {
+			break
+		}
+	}
+
+	// "Continue" statement. Skipping even numbers with continue
+	for loopTen := 0; loopTen < 10; loopTen++ {
+		if loopTen%2 == 0 {
+			continue
+		}
+		fmt.Println(loopTen)
+	}
+
+	fmt.Println("\n")
+
+	// Nested loops, breaking to a tag. (I.e.: tag "Loop")
+Loop:
+	for loopEleven := 1; loopEleven <= 3; loopEleven++ {
+		for loopTwelve := 1; loopTwelve <= 3; loopTwelve++ {
+			fmt.Println(loopEleven * loopTwelve)
+
+			if loopEleven*loopTwelve >= 3 {
+				break Loop
+			}
+		}
+	}
+
+	// Looping through collections
+	sliceLoopOne := []int{1, 2, 3}
+	for key, value := range sliceLoopOne {
+		fmt.Println("index:", key, "value:", value)
+	}
+	fmt.Println("\n")
+
+	sliceLoopTwo := "Hello Go!"
+	for key, value := range sliceLoopTwo {
+		fmt.Println("index:", key, "value:", string(value))
+	}
+
+	// Loops summary
+	//
+	// - For statements
+	//		> Simple loops
+	//			* for initialiser; test; incrementer {}
+	//			* for test {}
+	//			* for {}
+	//		> Exiting early
+	//			* break
+	//			* continue
+	//			* labels
+	//		> Looping over collections
+	//			* Arrays, slices, maps, strings, channels
+	//			* for k, v := range collection {}
+	//				· Only the keys: for k :=
+	//				· Only the values: for _, v :=
+}
+func deferPanicRecover() {
+
+	// Control flow:
+	// Defer, Panic and Recover
+
 }
 
 func main() {
@@ -772,5 +866,6 @@ func main() {
 	//arraysAndSlices()
 	//mapsAndStructs()
 	//controlFlow()
-	loops()
+	//loops()
+	deferPanicRecover()
 }
