@@ -995,6 +995,134 @@ func pointers() {
 	// pd := &pc[0]
 	// pe := &pc[1] - 4 // <-- This would throw error - invalid operation - mismatched types *int and int.
 	// fmt.Printf("%v %p %p\n", pc, pd, pe)
+
+	// Pointers to objects - example 1:
+	type pointersMyStruct struct {
+		foo int
+	}
+	var pms *pointersMyStruct
+	pms = &pointersMyStruct{foo: 42}
+	fmt.Println(pms)        // output: &{42}
+	fmt.Println(*pms, "\n") // output: {42}
+
+	// Pointers to objects - example 2:
+	type pointersMyStruct2 struct {
+		foo int
+	}
+	var pms2 *pointersMyStruct2
+	pms2 = new(pointersMyStruct2)
+	pms2.foo = 42
+	fmt.Println(pms2.foo, "\n") // output: 42
+
+	// Pointers to slices
+	psa := [3]int{1, 2, 3}
+	psb := psa            // copy of psa, won't apply changes in psa
+	psc := []int{1, 2, 3} // Slices are actually pointers to an underlying array
+	psd := psc            // pointed to psc, will apply changes in both
+	fmt.Println(psa, psb)
+	fmt.Println(psc, psd)
+	psa[1] = 42
+	psc[1] = 42
+	fmt.Println(psa, psb) // output: [1 42 3] [1 2 3]
+	fmt.Println(psc, psd) // output: [1 42 3] [1 42 3]
+
+	// Pointers to maps
+	pma := map[string]string{"foo": "bar", "baz": "buz"}
+	pmb := pma
+	fmt.Println(pma, pmb)
+	pma["foo"] = "qux"
+	fmt.Println(pma, pmb) // Same behaviour than slices, it will change both maps
+
+	// Pointers summary
+	//
+	//	- Creating pointers
+	//		> Pointer types use an asterisk (*) as a prefix to type pointed to
+	//			(*) *int - a pointer to an integer
+	//		> Use the "addressof" operator (&) to get the memory address of a variable in memory
+	//
+	//	- Dereferencing pointers
+	//		> Dereferece a pointer by calling it with a preceding asterisk (*)
+	//		> Complex types (e.g. structs) are automatically dereferenced
+	//
+	// 	- Create pointers to objects
+	//		> Can use the "addressof" operator (&) if value type already exists
+	//			* Example:
+	//				ms := myStruct{foo: 42}
+	//				p  := &ms
+	//		> Use addressof operator before initialiser:
+	//			* Example:
+	//				&myStruct{foo: 42}
+	//		> Use the "new" keyword
+	//			* Can't initialize fields at the same time though.
+	//
+	// 	- Types with internal pointers:
+	//		> All assignment operations in Go are copy operations
+	// 		> Slices and maps contain internal pointers, so copies point to the same underlying data
+}
+
+/////////////////////////////
+/// Functions masterclass ///
+/////////////////////////////
+
+// Basic syntax of functions:
+// func - name - ( - arguments - ) - return type - {
+// (indent) something we want to do
+// }
+func basics() {
+	for ind := 0; ind < 5; ind++ {
+		sayMessage("Hello, Go!", ind)
+	}
+	bfGreeting := "Heya"
+	bfName := "Stacey"
+	sayGreeting(&bfGreeting, &bfName)
+	fmt.Println(bfName, "\n")
+}
+
+func sayMessage(msg string, idx int) {
+	fmt.Println(msg)
+	fmt.Println("The value of index is", idx, "\n")
+}
+
+// We can declare several args separated with comma and then set the type:
+// We can also use pointers to manipulate the original variables:
+func sayGreeting(greeting, name *string) {
+	fmt.Printf("%v, %v!\n", *greeting, *name)
+	*name = "Ted"
+	fmt.Println(*name)
+}
+
+// Variatic parameters:
+func variatics() {
+	result := addingUp(1, 2, 3, 4, 5)
+	fmt.Println("The sum is:", *result)
+	result2 := addingUp2(1, 2, 3, 4, 5)
+	fmt.Println("The sum is:", result2)
+
+}
+
+// Return pointer example
+func addingUp(values ...int) *int {
+	fmt.Println(values)
+	result := 0
+	for _, v := range values {
+		result += v
+	}
+	return &result // This value is pointing to a var located in the heap
+}
+
+// Named return values
+func addingUp2(values2 ...int) (result2 int) {
+	fmt.Println(values2)
+	for _, val := range values2 {
+		result2 += val
+	}
+	return
+}
+
+func functionsMasterclass() {
+	basics()
+	variatics()
+
 }
 
 func main() {
@@ -1012,5 +1140,6 @@ func main() {
 	//deferFour()
 	//panicking()
 	//recovering()
-	pointers()
+	//pointers()
+	functionsMasterclass()
 }
