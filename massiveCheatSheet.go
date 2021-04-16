@@ -1096,7 +1096,7 @@ func variatics() {
 	result := addingUp(1, 2, 3, 4, 5)
 	fmt.Println("The sum is:", *result)
 	result2 := addingUp2(1, 2, 3, 4, 5)
-	fmt.Println("The sum is:", result2)
+	fmt.Println("The sum is:", result2, "\n")
 
 }
 
@@ -1119,9 +1119,27 @@ func addingUp2(values2 ...int) (result2 int) {
 	return
 }
 
+// Multiple returns
+func multipleReturns() {
+	mrd, err := mrdivide(5.0, 0.0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(mrd)
+}
+
+func mrdivide(divideA, divideB float64) (float64, error) {
+	if divideB == 0.0 {
+		return 0.0, fmt.Errorf("Can't divide by zero!") // returning error instead of panic to allow execution
+	}
+	return divideA / divideB, nil // <-- returning nil as error because error wasn't present
+}
+
 func functionsMasterclass() {
 	basics()
 	variatics()
+	multipleReturns()
 
 }
 
