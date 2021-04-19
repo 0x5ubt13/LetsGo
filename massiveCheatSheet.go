@@ -1,7 +1,8 @@
 package main // Go scripts always start with this line, either main or something else
 
 import (
-	"fmt"       // "format" - always import this to printing out
+	"fmt" // "format" - always import this to printing out
+	"go/ast"
 	"io/ioutil" // "input outout utility" - to read the body of a request
 	"log"       // to log errors
 	"math"
@@ -1140,6 +1141,34 @@ func functionsMasterclass() {
 	basics()
 	variatics()
 	multipleReturns()
+	mrdivide()
+
+	// Immediately invoked anonymous function
+	func() {
+		msg := "Immediately invoked function"
+		fmt.Println(msg)
+	}()
+	// Declared variable func
+	f := func() {
+		fmt.Println("Declared variable function")
+	}
+	f()
+
+	// Function signature for a divide function
+	var fdivide func(float64, float64) (float64, error)
+	fdivide = func(fa, fb float64) (float64, error) {
+		if fb == 0.0 {
+			return 0.0, fmt.Errorf("Can't divide by zero")
+		} else {
+			return fa / fb, nil
+		}
+	}
+	fd, err := fdivide(5.0, 0.0)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(fd)
 
 }
 
