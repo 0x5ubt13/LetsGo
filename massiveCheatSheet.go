@@ -1,7 +1,9 @@
 package main // Go scripts always start with this line, either main or something else
 
 import (
+	"bytes"
 	"fmt" // "format" - always import this to printing out
+	"io"
 	//"go/ast"
 	"io/ioutil" // "input outout utility" - to read the body of a request
 	"log"       // to log errors
@@ -10,6 +12,27 @@ import (
 	"reflect"  // "reflections" - for extracting tags out of a field when dealing with structs
 	"strconv"  // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
 )
+
+func main() {
+	//basicVariables()
+	//primitives()
+	//constants()
+	//arraysAndSlices()
+	//mapsAndStructs()
+	//controlFlow()
+	//loops()
+	//Defer, Panic and Recover:
+	//deferOne()
+	//deferTwo()
+	//deferThree()
+	//deferFour()
+	//panicking()
+	//recovering()
+	//pointers()
+	//functionsMasterclass()
+	//interfaces()
+	goroutines()
+}
 
 func basicVariables() {
 
@@ -1251,37 +1274,203 @@ func (g *greeter) greet() {
 //////////////////
 /// Interfaces ///
 //////////////////
+///   Basics   ///
+//////////////////
+
+type Writer interface {
+	// This method exists in the io package but we will create it anyway
+	// Writes a slice of bytes into something (console, tcp connection, etc)
+	Write([]byte) (int, error)
+}
+
+type ConsoleWriter struct{}
+
+func (cw ConsoleWriter) Write(data []byte) (int, error) {
+	n, err := fmt.Println(string(data))
+	return n, err
+}
+
+type Incrementer interface {
+	Increment() int
+}
+
+type IntCounter int
+
+func (ic *IntCounter) Increment() int {
+	*ic++
+	return int(*ic)
+}
+
+/// Composing interfaces together ///
+
+type Writer2 interface {
+	Write([]byte) (int, error)
+}
+
+type Closer interface {
+	Close() error
+}
+
+type WriterCloser interface {
+	// Here is where it gets juicy
+	Writer2
+	Closer
+}
+
+type BufferedWriterCloser struct {
+	// Example buffer needed to show this exercise
+	buffer *bytes.Buffer
+}
+
+func (bwc *BufferedWriterCloser) Write(data []byte) (int, error) {
+	n, err := bwc.buffer.Write(data)
+	if err != nil {
+		return 0, err
+	}
+
+	// Stores 8 characters into the buffer
+	v := make([]byte, 8)
+
+	// It won't print anything out if it's less than 8 characters
+	for bwc.buffer.Len() > 8 {
+		_, err := bwc.buffer.Read(v)
+		if err != nil {
+			return 0, err
+		}
+		_, err = fmt.Println(string(v))
+		if err != nil {
+			return 0, err
+		}
+	}
+	return n, nil
+}
+
+// Flush the rest of the buffer
+func (bwc *BufferedWriterCloser) Close() error {
+	for bwc.buffer.Len() > 0 {
+		data := bwc.buffer.Next(8)
+		_, err := fmt.Println(string(data))
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Constructor method to ensure everything is initialised properly
+func NewBufferedWriterCloser() *BufferedWriterCloser {
+	return &BufferedWriterCloser{
+		buffer: bytes.NewBuffer([]byte{}),
+	}
+}
 
 func interfaces() {
 	// Basics
+	// Interfaces don't describe data, describe behaviours
+	var w Writer = ConsoleWriter{}
+	w.Write([]byte("Hello Go!"))
+
+	myInt := IntCounter(0)
+	var inc Incrementer = &myInt
+	for i := 0; i < 10; i++ {
+		fmt.Println(inc.Increment())
+	}
+	fmt.Println("\n")
 
 	// Composing interfaces
+	var wc WriterCloser = NewBufferedWriterCloser()
+	wc.Write([]byte("Hello GitHub folks, this is a test!"))
+	wc.Close() // note if we comment this line out, we don't get the last line of the string because of the flusher
+	fmt.Println("\n")
 
 	// Type conversion
-	// The empty interface
+	r, ok := wc.(*BufferedWriterCloser) // try with wc.(io.Reader)
+	if ok {
+		fmt.Println(r)
+	} else {
+		fmt.Println("Conversion failed")
+	}
+	fmt.Println("\n")
+
+	// The empty interface (it has no methods on it)
+	var myObj interface{} = NewBufferedWriterCloser()
+	if owc, ok := myObj.(WriterCloser); ok {
+		owc.Write([]byte("Hello GitHub folks, this is another test!"))
+		owc.Close()
+	}
+	g, ok := myObj.(io.Reader)
+	if ok {
+		fmt.Println(g)
+	} else {
+		fmt.Println("Conversion failed\n")
+	}
+
 	// Type switches
+	var i interface{} = true
+	switch i.(type) {
+	case int:
+		fmt.Println("i is an integer")
+	case string:
+		fmt.Println("i is a string")
+	default:
+		fmt.Println("No clue, what's this!?")
+	}
 
-	// Implementing with values vs pointers
+	// Best practices:
+	// 	- Use many, small interfaces
+	//		> Single method interfaces are some of the most powerful and flexible
+	//			· io.Writer, io.Reader, interface{}
+	//
+	//	- Don't export interfaces for types that will be consumed
+	//	- Do export interfaces for types that will be used by package
+	//	- Design functions and methods to receive interfaces whenever possible
 
-	// Best practices
+	// Interfaces Summary:
+	//
+	//	- Basics
+	//	type Writer Interface {
+	//		Write([]byte)(int,error)
+	//		type ConsoleWriter struct {}
+	//		func (cw ConsoleWriter) Write(data []byte)(int, error){
+	//			n, err := fmt.Println(string(data))
+	//			return n, err
+	//		}
+	//
+	//	- Composing interfaces
+	//		type Writer interface {
+	//			Write([]byte) (int, error)
+	//		}
+	//
+	//		type Closer interface {
+	//			Close() error
+	//		}
+	//
+	//		type WriterCloser interface {
+	//			// Here is where it gets juicy
+	//			Writer2
+	//			Closer
+	//		}
+	//
+	// 	- Type conversion
+	//		var wc WriterCloser = NewBufferedWriterCloser()
+	//		bwc := wc.(*BufferedWriterCloser)
+	//
+	//	- The empty interface and type switches
+	//		var i interface{} = true
+	//		switch i.(type) {
+	//		case int:
+	//			fmt.Println("i is an integer")
+	//		case string:
+	//			fmt.Println("i is a string")
+	//		default:
+	//			fmt.Println("No clue, what's this!?")
+	//		}
+	//
+	// 	- Implementing with values vs pointers
+	//		> Method set of value is all methods with value receivers
+	//		> Method set of pointer is all methods, regardless of receiver type
 }
 
-func main() {
-	//basicVariables()
-	//primitives()
-	//constants()
-	//arraysAndSlices()
-	//mapsAndStructs()
-	//controlFlow()
-	//loops()
-	//Defer, Panic and Recover:
-	//deferOne()
-	//deferTwo()
-	//deferThree()
-	//deferFour()
-	//panicking()
-	//recovering()
-	//pointers()
-	//functionsMasterclass()
-	interfaces()
+func goroutines() {
+
 }
