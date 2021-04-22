@@ -3,7 +3,7 @@ I will be uploading here all my projects written in Go (or golang) in an attempt
 
 ## Projects available
 
-### Massive Cheat Sheet
+### [Massive Cheat Sheet](./massiveCheatSheet.go)
 #### What is it
 It is a transcription of the 7 hours video from freeCodeCamp.org [Learn Go Programming - Golang Tutorial for Beginners](https://www.youtube.com/watch?v=YS4e4q9oBaU)
 It contains all the snippets of code used to demonstrate what Go can do for you and some comments from myself to help you read the cheat sheet.
