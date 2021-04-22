@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt" // "format" - always import this to printing out
 	"io"
+	"runtime"
+	"sync"
 	//"go/ast"
 	"io/ioutil" // "input outout utility" - to read the body of a request
 	"log"       // to log errors
@@ -11,6 +13,7 @@ import (
 	"net/http" // to make http Get requests
 	"reflect"  // "reflections" - for extracting tags out of a field when dealing with structs
 	"strconv"  // "string converter" - we will need this if we want to convert int/float to string with strconv.Itoa() (Integer to ascii)
+	"time"
 )
 
 func main() {
@@ -31,7 +34,8 @@ func main() {
 	//pointers()
 	//functionsMasterclass()
 	//interfaces()
-	goroutines()
+	//goroutines()
+	channels()
 }
 
 func basicVariables() {
@@ -141,8 +145,6 @@ func primitives() {
 	fmt.Println(primsX >> 3)     //  2^3 / 2^3 = 2^0
 
 	// Floating point literals
-
-	// Floating point literals
 	// float32 -> from +-1.18e-38 up to +-3.4e38
 	// float64 -> from +-2.23e-308 up to +-1.8e308
 
@@ -154,9 +156,9 @@ func primitives() {
 	fmt.Printf("%v, %T\n", primsZ, primsZ)
 
 	// Reminder: float32 and float64 don't compute, both must be same type.
-	//           no modulus              |
-	//           no bit shifting         |      only available for integers
-	//           no bitwise operations   |
+	//           no modulus            \
+	//           no bit shifting        }   only available for integers
+	//           no bitwise operations /
 
 	// Complex type (imaginary numbers)
 	// Very powerful for data science
@@ -242,6 +244,7 @@ func primitives() {
 	//				¬ UTF-32
 	//				¬ Alias for int32
 	//				¬ Special methods normally required to process, e.g. strings.Reader#ReadRune
+
 }
 
 func constants() {
@@ -592,6 +595,7 @@ func mapsAndStructs() {
 	// 		> Structs are value types
 	//		> No inheritance, but can use composition via embedding
 	//		> Tags can be added to struct fields to describe field
+
 }
 
 func controlFlow() {
@@ -700,7 +704,7 @@ func controlFlow() {
 
 	// Switches with boolean conditions:
 	// output = executes the first case because the second one overlaps, but triggers later so gets ignored.
-	// this means "break" keyword is implied by design, as abovementioned with the fall through issue
+	// this means "break" keyword is implied by design, as aforementioned with the fall through issue
 	boolSwitch := 10
 	switch {
 	case boolSwitch <= 10:
@@ -750,7 +754,7 @@ func controlFlow() {
 }
 
 func returnTrue() bool {
-	// Declaring this function to showcase short-circuiting in control flow statements. See line 626.
+	// Declaring this function to showcase short-circuiting in control flow statements. See line 661.
 
 	fmt.Println("Returning True")
 	return true
@@ -765,21 +769,21 @@ func loops() {
 		fmt.Println(loopOne)
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Incrementing by other than 1:
 	for loopTwo := 0; loopTwo < 5; loopTwo = loopTwo + 2 {
 		fmt.Println(loopTwo)
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Looping two variables at the same time
 	for loopThree, loopFour := 0, 0; loopThree < 5; loopThree, loopFour = loopThree+1, loopFour+2 {
 		fmt.Println(loopThree, loopFour)
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Playing around with the counter (bad practise but valuable trick to know about)
 	for loopFive := 0; loopFive < 5; loopFive++ {
@@ -791,7 +795,7 @@ func loops() {
 		}
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Simplifying the initialisation:
 	loopSix := 0
@@ -799,7 +803,7 @@ func loops() {
 		fmt.Println(loopSix)
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// More simplifying, variable scoped now only to the For loop.
 	for loopSeven := 0; loopSeven < 5; {
@@ -816,7 +820,7 @@ func loops() {
 		loopEight++
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// The following is also equivalent to While True loops
 	loopNine := 0
@@ -836,7 +840,7 @@ func loops() {
 		fmt.Println(loopTen)
 	}
 
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Nested loops, breaking to a tag. (I.e.: tag "Loop")
 Loop:
@@ -855,7 +859,7 @@ Loop:
 	for key, value := range sliceLoopOne {
 		fmt.Println("index:", key, "value:", value)
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 	sliceLoopTwo := "Hello Go!"
 	for key, value := range sliceLoopTwo {
@@ -917,7 +921,7 @@ func deferThree() {
 		log.Fatal(err)
 	}
 	fmt.Printf("%s", robots)
-	fmt.Println("\n")
+	fmt.Println()
 }
 
 // Also, the defer statement evaluates and then gets delayed.
@@ -1375,13 +1379,13 @@ func interfaces() {
 	for i := 0; i < 10; i++ {
 		fmt.Println(inc.Increment())
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Composing interfaces
 	var wc WriterCloser = NewBufferedWriterCloser()
 	wc.Write([]byte("Hello GitHub folks, this is a test!"))
 	wc.Close() // note if we comment this line out, we don't get the last line of the string because of the flusher
-	fmt.Println("\n")
+	fmt.Println()
 
 	// Type conversion
 	r, ok := wc.(*BufferedWriterCloser) // try with wc.(io.Reader)
@@ -1390,7 +1394,7 @@ func interfaces() {
 	} else {
 		fmt.Println("Conversion failed")
 	}
-	fmt.Println("\n")
+	fmt.Println()
 
 	// The empty interface (it has no methods on it)
 	var myObj interface{} = NewBufferedWriterCloser()
@@ -1471,6 +1475,316 @@ func interfaces() {
 	//		> Method set of pointer is all methods, regardless of receiver type
 }
 
-func goroutines() {
+////////////////////
+///  Goroutines  ///
+////////////////////
 
+func goroutines() {
+	// They are used to make concurrent applications
+	// Creating goroutines
+
+	// "Spin off a "green thread" and say hello in that green thread
+	go sayHello()
+	time.Sleep(100 * time.Millisecond) // bad practice, only used for demonstration purposes
+
+	// Race condition, Go scheduler doesn't interrupt the main thread so msg changes before the goroutine gets called
+	var msg = "Heya!"
+	go func() {
+		fmt.Println(msg)
+	}()
+	msg = "Goodbye"
+	time.Sleep(100 * time.Millisecond) // bad practice, only used for demonstration purposes
+
+	// Example 3 - Killing the race condition
+	var msg2 = "Heya!"
+	go func(msg2 string) {
+		fmt.Println(msg2)
+	}(msg2)
+	msg2 = "Goodbye"
+	time.Sleep(100 * time.Millisecond) // bad practice, only used for demonstration purposes
+
+	// Synchronization
+
+	// WaitGroups
+	var wg = sync.WaitGroup{}
+	msg3 := "Ahoy!"
+	wg.Add(1) // Adding 1 goroutine to the WaitGroup
+	go func(msg3 string) {
+		fmt.Println(msg3)
+		wg.Done() // Finish the goroutine
+	}(msg3)
+	msg3 = "Goodbye"
+	wg.Wait() // Don't quit main function until the goroutines have finished
+
+	// Mutexes
+	// The following example doesn't use mutexes, so there will be race condition, prints randomly
+	for i := 0; i < 10; i++ {
+		wg2.Add(2)
+		go sayHello2()
+		go increment()
+	}
+	wg2.Wait()
+	fmt.Println()
+
+	// This example uses mutexes, destroys concurrence and parallelism but makes it print in order
+	runtime.GOMAXPROCS(100)
+	for iM := 0; iM < 10; iM++ {
+		wg3.Add(2)
+		m.RLock()          // We lock writing here
+		go sayHelloMutex() // We unlock writing here
+		m.Lock()
+		go incrementMutex()
+	}
+	//wg3.Wait() //not needed here because of wg2.Wait() above. Comment out the previous example to uncomment this line
+
+	// Parallelism
+	// Comment out runtime.GOMAXPROCS(100) in the above example to make the following line print your OS threads
+	fmt.Printf("Threads: %v\n", runtime.GOMAXPROCS(-1))
+
+	// Best practices
+	//	- Don't create goroutines in libraries
+	//		> Let consumer control concurrency (keep things simple)
+	//
+	//	- When creating a goroutine, know how it will end
+	//		> Avoids subtle memory leaks
+	//
+	//	- Check for race conditions at compile time
+	//		> Use flag -race to spot data races
+
+	// Goroutines Summary
+	//
+	//	- Creating goroutines
+	//		> Use go keyword in front of a function call
+	//		> When using anonymous functions, pass data as local variables
+	//
+	//	- Synchronization
+	//		> Use sync.WaitGroup to wait for groups of goroutines to complete
+	//		> Use sync.Mutex and sync.RWMutex to protect data access
+	//
+	//	- Parallelism
+	//		> By default, Go will use CPU threads equal to available cores
+	//		> Change with runtime.GOMAXPROCS
+	//		> More threads can increase performance, but too many can slow it down
+}
+
+// Synchronization and Mutex vars and funcs
+var wg2 = sync.WaitGroup{}
+var wg3 = sync.WaitGroup{}
+var counter = 0
+var counterM = 0
+var m = sync.RWMutex{}
+
+func sayHello() {
+	fmt.Println("Hello")
+}
+
+func sayHello2() {
+	fmt.Printf("Hello #%v\n", counter)
+	wg2.Done()
+}
+
+func increment() {
+	counter++
+	wg2.Done()
+}
+
+func sayHelloMutex() {
+	fmt.Printf("Hello #%v\n", counterM)
+	m.RUnlock()
+}
+
+func incrementMutex() {
+	counterM++
+	m.Unlock()
+	wg3.Done()
+}
+
+///////////////////
+///  Channels   ///
+///////////////////
+
+func channels() {
+	// Channel basics
+	// Designed to sync data transmission between multiple goroutines
+
+	//Example 1:
+	ch := make(chan int) // Channel is strongly typed so we need to specify the type of data flowing through the channel
+	cwg.Add(2)
+	go func() {
+		i := <-ch // i receives data from the channel
+		fmt.Println(i)
+		cwg.Done()
+	}()
+	go func() {
+		i := 142
+		ch <- i // 42 is sent to the channel
+		i = 127 // receiving goroutine doesn't care about our change of value here
+		cwg.Done()
+	}()
+	cwg.Wait()
+	fmt.Println()
+
+	// Example 2:
+	ch2 := make(chan int)
+	for j := 0; j < 5; j++ {
+		cwg2.Add(2)
+		go func() {
+			i2 := <-ch2 // Receiver
+			fmt.Println(i2)
+			cwg2.Done()
+		}()
+		go func() {
+			ch2 <- 242 // Sender
+			cwg2.Done()
+		}()
+	}
+	cwg2.Wait()
+	fmt.Println()
+
+	// Example 3:
+	ch3 := make(chan int)
+	cwg3.Add(2)
+	go func() {
+		i3 := <-ch3 // Receive from next goroutine
+		fmt.Println(i3)
+		ch3 <- 327 // Send to next goroutine
+		cwg3.Done()
+	}()
+	go func() {
+		ch3 <- 342         // Send to previous goroutine
+		fmt.Println(<-ch3) // Receive from previous goroutine
+		cwg3.Done()
+	}()
+	cwg3.Wait()
+	fmt.Println()
+
+	// Restricting data flow
+	ch4 := make(chan int)
+	cwg4.Add(2)
+	go func(ch4 <-chan int) { // Only receive from the channel
+		i4 := <-ch4
+		fmt.Println(i4)
+		cwg4.Done()
+	}(ch4)
+	go func(ch4 chan<- int) { // Only send to the channel
+		ch4 <- 442
+		cwg4.Done()
+	}(ch4)
+	cwg4.Wait()
+	fmt.Println()
+
+	// Buffered channels
+	// Avoid deadlocks with this technique
+
+	// Example - No loops
+	ch5 := make(chan int, 50) // Create a buffer of 50 to "store" 50 messages
+	cwg5.Add(2)
+	go func(ch5 <-chan int) { // Only receive from the channel
+		i5 := <-ch5     // Receive first message
+		fmt.Println(i5) // Print first message
+		i5 = <-ch5      // Receive second message
+		fmt.Println(i5) // Print second message
+		cwg5.Done()
+	}(ch5)
+	go func(ch5 chan<- int) { // Only send to the channel
+		ch5 <- 542
+		ch5 <- 527 // We are sending 2 messages
+		cwg5.Done()
+	}(ch5)
+	cwg5.Wait()
+	fmt.Println()
+
+	// Example: with loops
+	// Closing channels
+	ch6 := make(chan int, 50) // Create a buffer of 50 to "store" 50 messages
+	cwg6.Add(2)
+	go func(ch6 <-chan int) { // Only receive from the channel
+		for i := range ch6 {
+			fmt.Println(i)
+		}
+		cwg6.Done()
+	}(ch6)
+	go func(ch6 chan<- int) { // Only send to the channel
+		ch6 <- 642
+		ch6 <- 627 // We are sending 2 messages
+		close(ch6) // We close the channel here, avoiding a deadlock
+		cwg6.Done()
+	}(ch6)
+	cwg6.Wait()
+	fmt.Println()
+
+	// Select statements (like switch statement but specific to channels
+	go logger()
+	logCh <- logEntry{time.Now(), logInfo, "App is starting"}
+	time.Sleep(100 * time.Millisecond)
+	logCh <- logEntry{time.Now(), logInfo, "App is shutting down"}
+	time.Sleep(100 * time.Millisecond)
+	doneCh <- struct{}{} // passing an empty struct to the channel
+
+	// Channels summary
+	//
+	//	- Channel basics
+	//		> Create a channel with make command
+	//			* make(chan int)
+	//		> Send message into channel
+	//			* ch <- val
+	//		> Receive messages from the channel
+	//			* val := <- ch
+	//		> We can have multiple senders and receivers
+	//
+	//	- Restricting data flow
+	//		> Channel can be cast into send-only or receive-only versions
+	//			* Send-only: chan <- int
+	//			* Recv-only: <- chan int
+	//
+	//	- Buffered channels
+	//		> Channels block sender side till receiver is available
+	//		> Channels Block receiver side till message is available
+	//		> Can decouple sender and receiver with buffered channels
+	//			* make(chan int, 50)
+	//		> Use buffered channels when sender and receiver have assymmetric loading
+	//
+	//	- For...range loops with channels
+	//		> Use then to monitor channel and process messages as they arrive
+	//		> Loop exits when channel is closed
+	//
+	//	- Select statements
+	//		> Allows goroutine to monitor several channels at once
+	//			* Blocks if all channels block
+	//			* If multiple channels receive value simultaneously, behaviour is undefined
+}
+
+// Vars needed for 6 first examples
+var cwg = sync.WaitGroup{}
+var cwg2 = sync.WaitGroup{}
+var cwg3 = sync.WaitGroup{}
+var cwg4 = sync.WaitGroup{}
+var cwg5 = sync.WaitGroup{}
+var cwg6 = sync.WaitGroup{}
+
+// Creating the logger
+const (
+	logInfo    = "INFO"
+	logWarning = "WARNING"
+	logError   = "ERROR"
+)
+
+type logEntry struct {
+	time     time.Time
+	severity string
+	message  string
+}
+
+var logCh = make(chan logEntry, 50) // make channel logEntry with a buffer of 50
+var doneCh = make(chan struct{})    // "Signal only channel" - 0 memory allocation - can't send any data through
+
+func logger() {
+	for {
+		select {
+		case entry := <-logCh:
+			fmt.Printf("%v - [%v]%v\n", entry.time.Format("2006-01-02T15:04:05.0000000"), entry.severity, entry.message)
+		case <-doneCh:
+			break
+		}
+	}
 }
