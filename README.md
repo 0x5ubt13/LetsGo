@@ -12,12 +12,13 @@ It contains all the snippets of code used to demonstrate what Go can do for you 
 You will find 15 different topics spread over 19 functions in the main function (lines 19 - 39)
 
 You can either: 
-Comment out the specific topic you want to test in the main function and then play around with the snippets in their corresponding lines, or
-Grab the snippets and paste them into your scripts. If you are going to be watching the video, it may come in handy to copy-paste only the text shown on the screen into your IDE so you can try the same things Mike does in the video.
+- Comment out the specific topic you want to test in the main function and then play around with the snippets in their corresponding lines, or
+- Grab the snippets and paste them into your scripts. If you are going to be watching the video, it may come in handy to copy-paste only the text shown on the screen into your IDE so you can try the same things Mike does in the video.
 
 ### [Go Port Scanner](./Go_Port_Scanner/goPortScanner.go)
 #### What is it
 It is a simple Port Scanner written in Go to practice pointers, dereferencing and concurrency.
+It's in a primitive state so it only scans the localhost and doesn't take any input!
 
 #### How to use
-TODO
+Simply do `go run goPortScanner.go` and it will scan your localhost
