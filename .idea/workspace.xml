@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="889457a5-2349-4e50-a503-70d5c22a9341" name="Default Changelist" comment="sync">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="889457a5-2349-4e50-a503-70d5c22a9341" name="Default Changelist" comment="Updated README.md">
+      <change afterPath="$PROJECT_DIR$/Gophercises/1 - Quiz game/quiz_game.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +48,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Gophercises/1 - Quiz game" />
       <recent name="$PROJECT_DIR$/goPortScanner" />
     </key>
   </component>
@@ -69,6 +71,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="create new file" />
     <MESSAGE value="sync" />
-    <option name="LAST_COMMIT_MESSAGE" value="sync" />
+    <MESSAGE value="Updated README.md" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated README.md" />
   </component>
 </project>
