@@ -7,10 +7,6 @@ import (
 	"os"
 )
 
-func exit(msg string) {
-	fmt.Println(msg)
-	os.Exit(1)
-}
 func main() {
 	csvFilename := flag.String("csv", "problems.csv", "a .CSV file in the format of 'question,answer'")
 	flag.Parse()
@@ -27,6 +23,33 @@ func main() {
 	if err != nil {
 		exit("Failed to parse the provided .CSV file.")
 	}
-	fmt.Println(lines)
+	problems := parseLines(lines)
 
+	// Main control flow
+	for i, p := range problems {
+		fmt.Printf("Problem #%d: %s = \n", i+1, p.q)
+	}
+
+}
+
+func parseLines(lines [][]string) []problem {
+	ret := make([]problem, len(lines))
+
+	for i, line := range lines {
+		ret[i] = problem{
+			q: line[0],
+			a: line[1],
+		}
+	}
+	return ret
+}
+
+type problem struct {
+	q string
+	a string
+}
+
+func exit(msg string) {
+	fmt.Println(msg)
+	os.Exit(1)
 }
