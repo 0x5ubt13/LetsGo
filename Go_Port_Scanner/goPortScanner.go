@@ -47,7 +47,7 @@ func ScanPort(ip string, port int, timeout time.Duration) {
 			ScanPort(ip, port, timeout)
 			// Handling closed port
 		} else {
-			fmt.Println(port, "closed")
+			// fmt.Println(port, "closed") // Uncomment to see all closed ports
 		}
 
 		return
