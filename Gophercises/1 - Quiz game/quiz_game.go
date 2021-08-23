@@ -9,6 +9,17 @@ import (
 	"time"
 )
 
+type problem struct {
+	question string
+	answer   string
+}
+
+// Predeclaring exit triggers
+func exit(msg string) {
+	fmt.Println(msg)
+	os.Exit(1)
+}
+
 func main() {
 	csvFilename := flag.String("csv", "problems.csv", "a .CSV file in the format of 'question,answer'")
 	timeLimit := flag.Int("limit", 30, "The time limit for the quiz in seconds")
@@ -33,22 +44,22 @@ func main() {
 	timer := time.NewTimer(time.Duration(*timeLimit) * time.Second)
 
 	// Main quiz control flow
-	for i, p := range problems {
-		fmt.Printf("Problem #%d: %s = ", i+1, p.q)
+	for i, problemo := range problems {
+		fmt.Printf("Problem #%d: %s = ", i+1, problemo.question)
 
 		// Creating an anonymous func and a channel to handle the user input
 		answerCh := make(chan string)
 		go func() {
-			var answer string
-			fmt.Scanf("%s\n", &answer)
-			answerCh <- answer
+			var answr string
+			fmt.Scanf("%s\n", &answr)
+			answerCh <- answr
 		}()
 		select {
 		case <-timer.C:
 			fmt.Printf("\nTime's out! You scored %d out of %d.\n", correct, len(problems))
 			return
-		case answer := <-answerCh:
-			if answer == p.a {
+		case answr := <-answerCh:
+			if answr == problemo.answer {
 				fmt.Println("Correct!")
 				correct++
 			}
@@ -62,20 +73,9 @@ func parseLines(lines [][]string) []problem {
 
 	for i, line := range lines {
 		ret[i] = problem{
-			q: strings.TrimSpace(line[0]),
-			a: strings.TrimSpace(line[1]),
+			question: strings.TrimSpace(line[0]),
+			answer:   strings.TrimSpace(line[1]),
 		}
 	}
 	return ret
-}
-
-type problem struct {
-	q string
-	a string
-}
-
-// Predeclaring exit triggers
-func exit(msg string) {
-	fmt.Println(msg)
-	os.Exit(1)
 }
