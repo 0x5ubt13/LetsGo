@@ -70,7 +70,6 @@ func main() {
 // Parse the input file
 func parseLines(lines [][]string) []problem {
 	ret := make([]problem, len(lines))
-
 	for i, line := range lines {
 		ret[i] = problem{
 			question: strings.TrimSpace(line[0]),
