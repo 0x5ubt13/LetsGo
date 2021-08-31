@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="889457a5-2349-4e50-a503-70d5c22a9341" name="Default Changelist" comment="Updated README.md">
-      <change afterPath="$PROJECT_DIR$/Gophercises/1 - Quiz game/quiz_game.go" afterDir="false" />
+    <list default="true" id="889457a5-2349-4e50-a503-70d5c22a9341" name="Default Changelist" comment="sync">
+      <change afterPath="$PROJECT_DIR$/Gophercises/1 - Quiz game/quiz_game" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MyGoJourney.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MyGoJourney.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +38,9 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="configurable..is.expanded" value="false" />
     <property name="configurable.GoLibrariesConfigurable.is.expanded" value="true" />
+    <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
+    <property name="go.modules.go.list.on.any.changes.was.set" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$" />
@@ -51,6 +57,21 @@
       <recent name="$PROJECT_DIR$/Gophercises/1 - Quiz game" />
       <recent name="$PROJECT_DIR$/goPortScanner" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="go build quiz_game.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="MyGoJourney" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="FILE" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/Gophercises/1 - Quiz game/quiz_game.go" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build quiz_game.go" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TypeScriptGeneratedFilesManager">
@@ -70,8 +91,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="create new file" />
-    <MESSAGE value="sync" />
     <MESSAGE value="Updated README.md" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated README.md" />
+    <MESSAGE value="working" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="sync" />
+    <option name="LAST_COMMIT_MESSAGE" value="sync" />
   </component>
 </project>
