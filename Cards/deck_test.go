@@ -17,7 +17,5 @@ func testNewDeck(t *testing.T) {
 		t.Errorf("Expected last card of King of Diamonds, but got %v instead.", d[len(d) -1])
 	}
 	
-	if 
-
 
 }
