@@ -13,7 +13,7 @@ func main() {
 		cards := newDeck()
 		fmt.Println("Doesn't exost")
 	} else {
-		fmt.Println("Fucking hell")}
+		fmt.Println("Wut")}
 	*/
 	cards := newDeck()
 	cards.shuffle()
