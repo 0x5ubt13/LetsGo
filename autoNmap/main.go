@@ -1,50 +1,29 @@
 package main
 
 import (
-	"context"
+	"os"
+	"os/exec"
 	"fmt"
-	"log"
-	"time"
-
-	"github.com/Ullaakut/nmap"
 )
 
 func main() {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
-	defer cancel()
+	
+	argsWithProg := os.Args
+	argsWithoutProg := os.Args[1:]
 
-	// Equivalent to `/usr/local/bin/nmap -p 80,443,843 google.com facebook.com youtube.com`,
-	// with a 5 minute timeout.
-	scanner, err := nmap.NewScanner(
-		nmap.WithTargets("google.com", "facebook.com", "youtube.com"),
-		nmap.WithPorts("80,443,843"),
-		nmap.WithContext(ctx),
-	)
+	fmt.Printf("arg 0: %s\n", argsWithProg)
+    fmt.Printf("arg 1: %s\n", argsWithoutProg)
+
+	// ip := os.Args[1]
+
+	nmap_allports := exec.Command("nmap", "-p- --min-rate=1000 -T4 %s", os.Args[1], "-Pn" )
+	
+	stdout, err := nmap_allports.Output()
 	if err != nil {
-		log.Fatalf("unable to create nmap scanner: %v", err)
+		fmt.Println(err.Error())
+		return
 	}
 
-	result, warnings, err := scanner.Run()
-	if err != nil {
-		log.Fatalf("unable to run nmap scan: %v", err)
-	}
+	fmt.Print(string(stdout))
 
-	if warnings != nil {
-		log.Printf("Warnings: \n %v", warnings)
-	}
-
-	// Use the results to print an example output
-	for _, host := range result.Hosts {
-		if len(host.Ports) == 0 || len(host.Addresses) == 0 {
-			continue
-		}
-
-		fmt.Printf("Host %q:\n", host.Addresses[0])
-
-		for _, port := range host.Ports {
-			fmt.Printf("\tPort %d/%s %s %s\n", port.ID, port.Protocol, port.State, port.Service.Name)
-		}
-	}
-
-	fmt.Printf("Nmap done: %d hosts up scanned in %3f seconds\n", len(result.Hosts), result.Stats.Finished.Elapsed)
 }

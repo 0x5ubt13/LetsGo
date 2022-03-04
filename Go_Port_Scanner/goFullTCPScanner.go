@@ -3,9 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"golang.org/x/sync/semaphore"
 	"net"
 	"os/exec"
+	"os"
+	"semaphore"
 	"strconv"
 	"strings"
 	"sync"
@@ -13,21 +14,18 @@ import (
 )
 
 type PortScanner struct {
-	// The host to scan
-	ip string
-
-	// The threshold to limit the goroutines
+	ip   string
 	lock *semaphore.Weighted
 }
 
 func Ulimit() int64 {
-	// Call the built-in command `ulimit` to help lock
-	out, err := exec.Command("ulimit", "-n").Output()
+	out, err := exec.Command("/bin/sh", "-c", "ulimit -n").Output()
 	if err != nil {
 		panic(err)
 	}
 
 	s := strings.TrimSpace(string(out))
+
 	i, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		panic(err)
@@ -38,18 +36,15 @@ func Ulimit() int64 {
 
 func ScanPort(ip string, port int, timeout time.Duration) {
 	target := fmt.Sprintf("%s:%d", ip, port)
-
 	conn, err := net.DialTimeout("tcp", target, timeout)
+
 	if err != nil {
-		// Handling socket error
 		if strings.Contains(err.Error(), "too many open files") {
 			time.Sleep(timeout)
 			ScanPort(ip, port, timeout)
-			// Handling closed port
 		} else {
-			// fmt.Println(port, "closed") // Uncomment to see all closed ports
+			// fmt.Println(port, "closed")
 		}
-
 		return
 	}
 
@@ -62,8 +57,8 @@ func (ps *PortScanner) Start(f, l int, timeout time.Duration) {
 	defer wg.Wait()
 
 	for port := f; port <= l; port++ {
-		wg.Add(1)
 		ps.lock.Acquire(context.TODO(), 1)
+		wg.Add(1)
 
 		go func(port int) {
 			defer ps.lock.Release(1)
@@ -74,10 +69,18 @@ func (ps *PortScanner) Start(f, l int, timeout time.Duration) {
 }
 
 func main() {
+	// Target check
+	if (len(os.Args) > 1) {
+		// execute main
+	} else {
+		panic("You must provide an IP address to attack")
+	}
+
 	ps := &PortScanner{
-		ip:   "127.0.0.1",
+		ip:   os.Args[1],
 		lock: semaphore.NewWeighted(Ulimit()),
 	}
 
 	ps.Start(1, 65535, 500*time.Millisecond)
 }
+
