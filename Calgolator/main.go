@@ -10,35 +10,77 @@ import (
 )
 
 func main() {
+	operators, operation := readingInput()
+	total := execute(operators, operation)
+
+	fmt.Printf("The total is %v", total)
+}
+
+func readingInput() ([]float64, string) {
+	// Making slice with operators, max 100
+	operators := make([]float64, 1, 100)
+
 	// Creating the reader buffer so we can use it afterwards 
 	reader := bufio.NewReader(os.Stdin)
 
-	// First number
-	fmt.Print("Enter the first number: ")
-	aInput, _ := reader.ReadString('\n')
-	a, err := strconv.ParseFloat(strings.TrimSpace(aInput), 64)
-	if err != nil {
-		panic(err)
-	} 
-
-	// Second number
-	fmt.Print("Enter the second number: ")
-	bInput, _ := reader.ReadString('\n')
-	b, err := strconv.ParseFloat(strings.TrimSpace(bInput), 64)
+	// Read first number
+	fmt.Print("Enter first number: ")
+	firstNumber, _ := reader.ReadString('\n')
+	fN, err := strconv.ParseFloat(strings.TrimSpace(firstNumber), 64)
 	if err != nil {
 		panic(err)
 	}
 
-	// Now that the numbers are parsed, add them up calling adding()
-	adding(a, b)
+	// Add the new number to the slice
+	operators = append(operators, fN)
+
+	for {
+		// Read new number
+		fmt.Print("Enter new number: ")
+		newNumber, _ := reader.ReadString('\n')
+		nN, err := strconv.ParseFloat(strings.TrimSpace(newNumber), 64)
+		if err != nil {
+			panic(err)
+		}
+
+		// Add the new number to the slice
+		operators = append(operators, nN)
+
+		// Control flow check 
+		fmt.Print("Enter more numbers? y/n: ")
+		option, err := reader.ReadString('\n')
+		choice := strings.ToLower(strings.TrimSpace(option))
+		if err != nil {
+			panic(err)
+		} else if choice == "n" {
+			// Select the operation and exit the loop
+			fmt.Printf("[+] Numbers correctly processed.\n[+] Using the following as operators:\n%+v\n", operators[1:])
+			fmt.Print("Now please select the operation you want to perform (+, -, *, /): ")
+			sign, _ := reader.ReadString('\n')
+			operation := strings.TrimSpace(sign)
+			return operators, operation
+		} else {
+			continue
+		}
+	}
 }
 
-func adding(a float64, b float64) {
-	// Sum the values passed 
-	c := a + b
+func execute(operators []float64, operation string) (float64) {
+	// First number in slice is "0" so to avoid math problems we need to start counting from index 1 onwards
+	firstOperator := operators[1]
+	otherOperators := operators[2:]
+	for _, operator := range otherOperators {
+		switch operation {
+		case "+":
+			firstOperator += operator
+		case "-":
+			firstOperator -= operator
+		case "*":
+			firstOperator *= operator
+		case "/":
+			firstOperator /= operator
+		} 
+	}
 	
-	// Making sure we have a precise decimal number
-	d := math.Round(c*100) / 100
-
-	fmt.Printf("The sum of %v and %v equals %v\n", a, b, d)
+	return (math.Round(firstOperator*100) / 100)
 }
