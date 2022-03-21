@@ -4,10 +4,6 @@ import (
 	"fmt"
 )
 
-func (p person) print() {
-	fmt.Printf("%+v", p)
-}
-
 type contactInfo struct {
 	email string
 	zipCode int
@@ -28,7 +24,7 @@ func main() {
 	
 	mr := person{firstName: "Elliot", lastName: "Alderson"}
 	mr.hackerAlias = "Mr. Robot"
-
+	
 	n := person{
 		firstName: "Thomas",
 		lastName: "Anderson",
@@ -38,8 +34,19 @@ func main() {
 			zipCode: 99999,
 		},
 	}
-
+	
 	fmt.Printf("%+v\n", zc)
 	fmt.Println(mr)
 	n.print()
+	n.updateFirstName("Neo")
+	n.print()
+}
+
+func (p person) print() {
+	fmt.Printf("%+v", p)
+}
+
+// Pointer so it actually changes the original struct
+func (pointerToPerson *person) updateFirstName(newFirstName string) {
+	(*pointerToPerson).firstName = newFirstName
 }
