@@ -15,7 +15,7 @@ You can either:
 - Comment out the specific topic you want to test in the main function and then play around with the snippets in their corresponding lines, or
 - Grab the snippets and paste them into your scripts. If you are going to be watching the video, it may come in handy to copy-paste only the text shown on the screen into your IDE so you can try the same things Mike does in the video.
 
-### [Basic concepts](./Basic%20concepts)
+### [Basic concepts](./Basic%20concepts)
 #### What is it 
 Quick overview of the basics in Go. Currently available:
 
@@ -24,7 +24,7 @@ Quick overview of the basics in Go. Currently available:
 - [GoFizzBuzz](./Basic%20concepts/GoFizzBuzz/main.go). FizzBuzz written in Go.
 - [Maps](./Basic%20concepts/Maps/main.go). The basic concepts of Maps (or "dicts" in Python, or "hashes" in Ruby, or "objects" in JavaScript)
 - [nmapCaller](./Basic%20concepts/nmapCaller/main.go). Showcasing how to call other programs from Go.
-- [Odd%20or%20even](./Basic%20concepts/Odd_or_Even/odd_or_even.go). Playing around with basic ints.
+- [Odd or even](./Basic%20concepts/Odd_or_Even/odd_or_even.go). Playing around with basic ints.
 - [ReadingInput](./Basic%20concepts/ReadingInput/main.go). Quick overview of how to read a stream of input.
 - [ReadingWeb](./Basic%20concepts/ReadingWeb/main.go). Quick overview of how to read from the web.
 - [Structs](./Basic%20concepts/Structs/main.go). The basic concepts of Structs (very close to what a Class is... But it's not a class. In Go it's like a Map in steroids)
