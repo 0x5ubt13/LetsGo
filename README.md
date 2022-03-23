@@ -20,17 +20,18 @@ You can either:
 Quick overview of the basics in Go. Currently available:
 
 - [Calgolator](./Basic%20concepts/Calgolator/main.go). A simple calculator to showcase functions.
-- [Gobonacci](./Basic%20concepts/Gobonacci/gobonacci.go). Fibonacci in our fave lang.
-- [GoFizzBuzz](./Basic%20concepts/GoFizzBuzz/main.go). FizzBuzz written in Go.
-- [Maps](./Basic%20concepts/Maps/main.go). The basic concepts of Maps (or "dicts" in Python, or "hashes" in Ruby, or "objects" in JavaScript)
+- [Gobonacci](./Basic%20concepts/Gobonacci/gobonacci.go). Fibonacci in our fave language.
+- [GoFizzBuzz](./Basic%20concepts/GoFizzBuzz/main.go). Fizz-Buzz written in Go.
+- [Interfaces](./Basic%20concepts/Interfaces/main.go). Grouping and promoting Structs into something else to create common methods.
+- [Maps](./Basic%20concepts/Maps/main.go). The basic concepts of Maps (or "dicts" in Python, or "hashes" in Ruby, or "objects" in JavaScript...).
 - [nmapCaller](./Basic%20concepts/nmapCaller/main.go). Showcasing how to call other programs from Go.
-- [Odd or even](./Basic%20concepts/Odd_or_Even/odd_or_even.go). Playing around with basic ints.
+- [Odd or even](./Basic%20concepts/Odd_or_Even/odd_or_even.go). Playing around with basic integers.
 - [ReadingInput](./Basic%20concepts/ReadingInput/main.go). Quick overview of how to read a stream of input.
 - [ReadingWeb](./Basic%20concepts/ReadingWeb/main.go). Quick overview of how to read from the web.
-- [Structs](./Basic%20concepts/Structs/main.go). The basic concepts of Structs (very close to what a Class is... But it's not a class. In Go it's like a Map in steroids)
+- [Structs](./Basic%20concepts/Structs/main.go). The basic concepts of Maps in steroids... I mean Structs :)
 
 #### How to use
-The main purpose is to consult the snippets of code to copy/paste.
+The main purpose is to quickly consult the snippets of code to copy/paste, in a way more concise manner than consulting my [Massive Cheat Sheet](./Massive_Cheatsheet/massiveCheatSheet.go) 
 
 ### [Go Port Scanner](./Go_Port_Scanner/goPortScanner.go)
 #### What is it
