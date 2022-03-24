@@ -16,7 +16,6 @@ func main() {
 
 	printGreeting(eb)
 	printGreeting(sb)
-
 }
 
 // Allow all bots to use printGreeting
