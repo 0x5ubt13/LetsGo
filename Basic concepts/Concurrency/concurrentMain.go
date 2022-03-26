@@ -19,10 +19,8 @@ func main() {
 	// Concurrency using Go Routines and Channels
 	c := make(chan string)
 
-
-	for _, site := range websites{
+	for _, site := range websites {
 		go checkSiteStatus(site, c)
-		
 	}
 
 	for i := 0; i < len(websites); i++ {

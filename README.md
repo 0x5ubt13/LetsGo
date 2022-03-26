@@ -20,6 +20,7 @@ You can either:
 Quick overview of the basics in Go. Currently available:
 
 - [Calgolator](./Basic%20concepts/Calgolator/main.go). A simple calculator to showcase functions.
+- [Concurrency](./Basic%20concepts/Concurrency/concurrentMain.go). An example of how to use Go Routines and Channels.
 - [Gobonacci](./Basic%20concepts/Gobonacci/gobonacci.go). Fibonacci in our fave language.
 - [GoFizzBuzz](./Basic%20concepts/GoFizzBuzz/main.go). Fizz-Buzz written in Go.
 - [Interfaces](./Basic%20concepts/Interfaces/main.go). Grouping and promoting Structs into something else to create common methods.
