@@ -14,6 +14,7 @@ func main() {
 		"https://amazon.com",
 	}
 
+	// Secuential using a serial for loop
 	for _, site := range websites {
 		code := checkSiteStatus(site)
 		fmt.Printf("Site: %v\tStatus code: %v\n", site[8:], code)
