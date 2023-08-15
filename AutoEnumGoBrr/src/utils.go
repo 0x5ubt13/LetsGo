@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"log"
 	"net"
 	"os"
 	"os/exec"
@@ -108,7 +108,7 @@ func IsValidPath(fp string) bool {
 
 	// Attempt to create it
 	var d []byte
-	if err := ioutil.WriteFile(fp, d, 0644); err == nil {
+	if err := os.WriteFile(fp, d, 0644); err == nil {
 	  os.Remove(fp) // And delete it
 	  return true
 	}
@@ -119,7 +119,7 @@ func IsValidPath(fp string) bool {
 
 func readTargetsFile(filename string) ([]string, int) {
 	// fetching the file
-	data, err := ioutil.ReadFile(*optTarget)
+	data, err := os.ReadFile(*optTarget)
 	if err != nil {panic(err)}
 
 	// Get lines
@@ -151,6 +151,7 @@ func printPhase(phase int) {
 	}
 }
 
+
 func customMkdir(name string) {
 	if IsValidPath(name){
 		err := os.Mkdir(name, os.ModePerm)
@@ -160,4 +161,28 @@ func customMkdir(name string) {
 			fmt.Printf("%s %s %s", green("[+] Directory"), yellow(name), green("created successfully"))
 		}
 	}
+}
+
+
+// Write bytes output to file
+func writePortsToFile(filePath string, ports string, host string) string {
+	// Open file
+	fileName := fmt.Sprintf("%s/open_ports.txt", filePath)
+	f, err := os.Create(fileName)
+
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    defer f.Close()
+
+	_, err2 := fmt.Fprintln(f, ports)
+
+    if err2 != nil {
+        log.Fatal(err2)
+    }
+
+    fmt.Printf("%s %s %s %s\n", green("[+] Successfully written open ports for host"), yellow(host), green("to file"), yellow(fileName))
+
+	return ports
 }

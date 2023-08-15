@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 	"time"
 
 	nmap "github.com/Ullaakut/nmap/v3"
 )
 
-func portSweep(target string) {
+func portSweep(target string) []nmap.Host {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
@@ -19,7 +20,9 @@ func portSweep(target string) {
 	scanner, err := nmap.NewScanner(
 		ctx,
 		nmap.WithTargets(target),
-		nmap.WithPorts("80,443,843"),
+		nmap.WithPorts("1-65535"),
+		nmap.WithMinRate(2000),
+		nmap.WithPrivileged(),
 	)
 	if err != nil {
 		log.Fatalf("unable to create nmap scanner: %v", err)
@@ -47,9 +50,12 @@ func portSweep(target string) {
 	}
 
 	fmt.Printf("Nmap done: %d hosts up scanned in %.2f seconds\n", len(result.Hosts), result.Stats.Finished.Elapsed)
+
+	return result.Hosts
 }
 
 
+// Run all phases of scanning using a single target
 func singleTarget(target string, baseFilePath string) {
 	fmt.Printf("Debug - Single target: %s\n", target)
 	fmt.Printf("Debug - Base file path: %s\n", baseFilePath)
@@ -58,10 +64,46 @@ func singleTarget(target string, baseFilePath string) {
 	// Make base dir for the target
 	customMkdir(path)
 
-	portSweep(target)
+	// Perform ports sweep
+	sweptHost := portSweep(target)
+
+	// Save open ports in dedicated slice
+	// Convert slice to nmap-friendly formatted numbers
+    openPortsSlice := []string{}
+    
+    // Create a string slice using strconv.FormatUint
+    // ... Append strings to it.
+    for _, host := range sweptHost {
+		if len(host.Ports) == 0 || len(host.Addresses) == 0 {
+			continue
+		}
+
+		for _, port := range host.Ports {
+			if fmt.Sprintf("%s", port.State) == "open" {
+				fmt.Println("Open port:", port.ID)
+				text := strconv.FormatUint(uint64(port.ID), 10)
+				openPortsSlice = append(openPortsSlice, text)
+			}
+		}
+    }
+    
+    // Join our string slice.
+    openPorts := strings.Join(openPortsSlice, ",")
+
+	if len(openPorts) > 0 {
+		fmt.Printf("%s %s: %v\n", green("[+] Open ports for target"), yellow(target), openPorts)
+		writePortsToFile(path, openPorts, target)
+	} else {
+		fmt.Printf("%s %s%s\n", red("[-] No open ports were found in host"), yellow(target), red(". Aborting the rest of scans for this host"))
+		return 
+	}
+
+	// Run ports iterator
+
 }
 
 
+// Wrapper for multi-target
 func multiTarget(targetsFile *string) {
 	if !*optQuiet { fmt.Printf("%s%s\n", green("[+] Using multi-targets file: "), yellow(*targetsFile)) }
 	fileNameWithExtension := strings.Split(*targetsFile, "/")
@@ -80,6 +122,7 @@ func multiTarget(targetsFile *string) {
 		singleTarget(target, targetsBaseFilePath)
 	}
 }
+
 
 // Run scan
 func scan() {
