@@ -9,6 +9,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	"golang.org/x/crypto/ssh"
 )
@@ -17,12 +18,16 @@ func main() {
 	pass1 := completeLevel(0, getBandit0Password(), "cat readme")
 	fmt.Printf("Bandit 1 password: %s", pass1)
 
+	time.Sleep(10)
+
 	pass2 := completeLevel(1, pass1, "whoami")
 	fmt.Println("Bandit 1 output: ", pass2)
 }
 
 func completeLevel(no int, pass string, cmd string) string {
-	nextLevelPass, err := remoteRun(fmt.Sprintf("bandit%s", strconv.Itoa(no)), pass, cmd)
+	nextLevel := fmt.Sprintf("bandit%s", strconv.Itoa(no))
+	fmt.Println("Trying level", nextLevel, "using pass", pass)
+	nextLevelPass, err := remoteRun(nextLevel, pass, cmd)
 	if err != nil {
 		fmt.Println("Error executing completeLevel: ", err)
 		os.Exit(3)
